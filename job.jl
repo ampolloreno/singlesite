@@ -4,7 +4,7 @@ using ArgParse
 using Cubature
 using DelimitedFiles
 start = time()
-print(start)
+println(start)
 flush(stdout)
 function R(n::Int64, m::Int64, ρ::Float64)
     if (n - m) % 2 != 0
@@ -182,6 +182,6 @@ y = parse(Float64, ARGS[2])
 z = infidelity_across_disk(simultaneous_exact_evolution, gaussian_spin_profile)(ρ, ϕ)
 writedlm("data$x,$y.csv",  z, ',')
 stop = time()
-print(stop)
-print(stop-start)
+println(stop)
+println(stop-start)
 flush(stdout)

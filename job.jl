@@ -117,8 +117,13 @@ function recon(ρ, ϕ)
     end
     total
 end
-function H_odf(ρ, ϕ, t, zernike_coefficients_even, zernike_coefficients_odd, U, ψ, μ, ω)
-    U * cos(recon(ρ, ϕ))
+
+function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, ω, orders)
+    total = 0
+    for order in orders
+        total += U * cos(-order*ω*t + ψ + zernike_recon(ρ, ϕ))
+    end
+    total
 end
 
 function infidelity_across_disk(F1, F2)

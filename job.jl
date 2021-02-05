@@ -5,6 +5,7 @@ using Cubature
 using DelimitedFiles
 start = time()
 print(start)
+flush(stdout)
 function R(n::Int64, m::Int64, ρ::Float64)
     if (n - m) % 2 != 0
         0
@@ -183,3 +184,4 @@ writedlm("data$x,$y.csv",  z, ',')
 stop = time()
 print(stop)
 print(stop-start)
+flush(stdout)

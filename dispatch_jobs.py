@@ -6,11 +6,11 @@ from subprocess import call
 num_processors = 1
 SLURM = f"""#!/bin/bash
 #SBATCH -J single_site
-#SBATCH -p jila nistq
+#SBATCH -p jila
 #SBATCH -q standard
 #SBATCH -n {num_processors}
 #SBATCH -N 1
-#SBATCH --mem=7.5G
+#SBATCH --mem=8G
 #SBATCH -t 01-00:0:00
 #SBATCH --tmp=1GB
 
@@ -29,12 +29,12 @@ SLURM = f"""#!/bin/bash
 # Replace matlab with the package you'll use.
 
 # module load matlab
-module load julia
+# module load julia
 # The following example runs a MATLAB program stored in example.m
 # Replace this with commands to run your job. 
 """
 
-cmd = f"julia ~/repos/singlesite_for_cluster/job.jl"
+cmd = f"~/julia-1.5.3/bin/julia ~/repos/singlesite/job.jl"
 print("Dispatching...")
 interionic_spacing = .1
 up_modifier = np.sqrt(3)/2 * interionic_spacing
@@ -45,7 +45,7 @@ digits = 2
 
 def gen_points(pt, points_inside_circle, x, y):
     radius = .5
-    pt = [round(pt[0], digits=digits), round(pt[1], digits=digits)]
+    pt = [round(pt[0], digits), round(pt[1], digits)]
     if pt in points_inside_circle or pt[0]**2 + pt[1]**2 > radius**2:
         return
     else:

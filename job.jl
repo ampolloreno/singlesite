@@ -1,7 +1,7 @@
 using SpecialFunctions
 using QuantumOptics
 using ArgParse
-
+using Cubature
 
 
 function Q(n::Int64, r2::Float64, r1::Float64)
@@ -74,14 +74,6 @@ function unpack_zernike(zernike_coefficients_even, zernike_coefficients_odd, ρ,
     end
     eventuples # No odd tuples, so we'll leave it simple. (In fact, only m=0 again but we'll test this.)
 end
-
-interionic_spacing = .1
-up_modifier = sqrt(3)/2 * interionic_spacing
-over_modifer = 1/2 * interionic_spacing
-points_inside_circle = []
-digits = 2
-radius = .5
-pairs, x, y = gen_points([0, 0], [], [], [])
 
 
 Γ = 1/62

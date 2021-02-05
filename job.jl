@@ -3,21 +3,6 @@ using QuantumOptics
 using ArgParse
 using Cubature
 
-
-function Q(n::Int64, r2::Float64, r1::Float64)
-    if n % 2 != 0
-        0
-    else
-        function summand(k)
-            n = big(n)
-            k = big(k)
-            (-1)^k * factorial(n-k)/(factorial(k)*factorial(big(Int(n/2 - k)))*factorial(big(Int(n/2 - k))))*((r2)^(n-2*k + 1)-(r1)^(n-2*k + 1))/(n-2k+1)
-        end
-        mapreduce(summand, +, Array(range(0, stop=Int((n)/2), step=1)))
-    end
-
-        end
-
 function R(n::Int64, m::Int64, ρ::Float64)
     if (n - m) % 2 != 0
         0
@@ -30,6 +15,15 @@ function R(n::Int64, m::Int64, ρ::Float64)
         mapreduce(summand, +, Array(range(0, stop=Int((n-m)/2), step=1)))
     end
 end
+
+function Z(n, m, ρ, θ)
+    if m < 0
+        R(n, abs(m), ρ) * sin(abs(m) * θ)
+    else
+        R(n, m, ρ) * cos(m * θ)
+    end
+end
+
 
 function plot_triangles_across_unit_disk(f, x, y)
     ret = []

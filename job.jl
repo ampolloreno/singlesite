@@ -128,7 +128,7 @@ function recon(ρ, ϕ)
     total
 end
 
-function H_odf(ρ, ϕ, t, zernike_coefficients_even, zernike_coefficients_odd, U, ψ, μ, ω)
+function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, μ, ω)
     U * cos(-μ*t + ψ + zernike_recon(ρ, ϕ))
 end
 

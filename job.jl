@@ -149,7 +149,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
             println(order)
             flush(stdout)
             μ = order * ω
-            H(t, _) = H_odf(ρ, ϕ, t, zernikeeven, zernikeodd, U, θ, μ, ω)*sigmaz(b), [], []
+            H(t, _) = H_odf(ρ, ϕ, t, recon, U, θ, μ, ω)*sigmaz(b), [], []
             _, ψ = @skiptimechecks timeevolution.master_dynamic(T, ψ, H)
             ψ = last(ψ)
         end

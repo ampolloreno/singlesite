@@ -136,7 +136,8 @@ function infidelity_across_disk(F1, F2)
     function infidelity_polar(ρ, ϕ)
         ψ1 = F1(ρ, ϕ).data
         ψ2 = F2(ρ, ϕ).data
-        1 - real(fidelity(ψ1, ψ2))
+        infid = 1 - real(fidelity(ψ1, ψ2))
+        return infid, ψ1, ψ2
     end
 end
 
@@ -171,7 +172,7 @@ end
 Γ = 1/62
 ω = 2*π*180E3
 θ = -π/2;
-max_order = 30
+max_order = 0
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 evolution_time =  50E-6
@@ -183,8 +184,10 @@ x = parse(Float64, ARGS[1])
 y = parse(Float64, ARGS[2])
 ρ = sqrt(x^2 + y^2)
 ϕ = atan(y, x)
-z = infidelity_across_disk(sequential_exact_evolution, gaussian_spin_profile)(ρ, ϕ)
-writedlm("data$x,$y.csv",  z, ',')
+infid, ψ1, ψ2 = infidelity_across_disk(sequential_exact_evolution, gaussian_spin_profile)(ρ, ϕ)
+writedlm("infid$x,$y.csv",  infid, ',')
+writedlm("seq$x,$y.csv",  ψ1, ',')
+writedlm("gauss$x,$y.csv",  ψ2, ',')
 stop = time()
 println(stop)
 println(stop-start)

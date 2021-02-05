@@ -81,6 +81,13 @@ step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];
 σ1 = .1
 σ2 = 1
+function gaussian(σ1, σ2)
+    function func(ρ, ϕ)
+        x = ρ*cos(ϕ)
+        y = ρ*sin(ϕ)
+        exp(-x^2/σ1^2 + -y^2/σ2^2)
+    end
+end
 function integrand(n, m)
     function rtn(coor)
         ρ = coor[1]

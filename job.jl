@@ -172,7 +172,7 @@ end
 Γ = 1/62
 ω = 2*π*180E3
 θ = -π/2;
-max_order = 0
+max_order = 30
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 evolution_time =  50E-6

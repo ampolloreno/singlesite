@@ -1,6 +1,7 @@
 """
 python dispatch_jobs.py
 """
+import numpy as np
 from subprocess import call
 num_processors = 1
 SLURM = f"""#!/bin/bash
@@ -35,6 +36,35 @@ module load julia
 
 cmd = f"julia ~/repos/singlesite_for_cluster/job.jl"
 print("Dispatching...")
-with open('scratch.txt', 'w') as filehandle:
-    filehandle.write(SLURM + "\n" + cmd)
-call('sbatch scratch.txt', shell=True)
+interionic_spacing = .1
+up_modifier = np.sqrt(3)/2 * interionic_spacing
+over_modifer = 1/2 * interionic_spacing
+points_inside_circle = []
+digits = 2
+
+
+def gen_points(pt, points_inside_circle, x, y):
+    radius = .5
+    pt = [round(pt[0], digits=digits), round(pt[1], digits=digits)]
+    if pt in points_inside_circle or pt[0]**2 + pt[1]**2 > radius**2:
+        return
+    else:
+        points_inside_circle.append(pt)
+        x.append(pt[0])
+        y.append(pt[1])
+        gen_points([pt[0] + over_modifer, pt[1] - up_modifier], points_inside_circle, x, y)
+        gen_points([pt[0] - over_modifer, pt[1] - up_modifier], points_inside_circle, x, y)
+        gen_points([pt[0] - over_modifer, pt[1] + up_modifier], points_inside_circle, x, y)
+        gen_points([pt[0] + over_modifer, pt[1] + up_modifier], points_inside_circle, x, y)
+        gen_points([pt[0] + interionic_spacing, pt[1]], points_inside_circle, x, y)
+        gen_points([pt[0] + interionic_spacing, pt[1]], points_inside_circle, x, y)
+        gen_points([pt[0] - interionic_spacing, pt[1]], points_inside_circle, x, y)
+        return points_inside_circle, x, y
+
+pairs, x, y = gen_points([0, 0], [], [], [])
+
+for i, xx in enumerate(x):
+    yy = y[i]
+    with open('scratch.txt', 'w') as filehandle:
+        filehandle.write(SLURM + "\n" + cmd + f" {xx} {yy}")
+    call('sbatch scratch.txt', shell=True)

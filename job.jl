@@ -1,33 +1,9 @@
-interionic_spacing = .1
-up_modifier = sqrt(3)/2 * interionic_spacing
-over_modifer = 1/2 * interionic_spacing
-points_inside_circle = []
-digits = 2
-radius = .5
-
-function gen_points(pt, points_inside_circle, x, y)
-    pt = [round(pt[1], digits=digits), round(pt[2], digits=digits)]
-    if pt in points_inside_circle || pt[1]^2 + pt[2]^2 > radius^2
-        return
-    else
-        push!(points_inside_circle, pt)
-        push!(x, pt[1])
-        push!(y, pt[2])
-        gen_points([pt[1] + over_modifer, pt[2] - up_modifier], points_inside_circle, x, y)
-        gen_points([pt[1] - over_modifer, pt[2] - up_modifier], points_inside_circle, x, y)
-        gen_points([pt[1] - over_modifer, pt[2] + up_modifier], points_inside_circle, x, y)
-        gen_points([pt[1] + over_modifer, pt[2] + up_modifier], points_inside_circle, x, y)
-        gen_points([pt[1] + interionic_spacing, pt[2]], points_inside_circle, x, y)
-        gen_points([pt[1] + interionic_spacing, pt[2]], points_inside_circle, x, y)
-        gen_points([pt[1] - interionic_spacing, pt[2]], points_inside_circle, x, y)
-        return points_inside_circle, x, y
-    end
-end
-pairs, x, y = gen_points([0, 0], [], [], [])
+using SpecialFunctions
+using QuantumOptics
+using ArgParse
 
 
-r2 = .3
-r1 = .2
+
 function Q(n::Int64, r2::Float64, r1::Float64)
     if n % 2 != 0
         0
@@ -55,7 +31,6 @@ function R(n::Int64, m::Int64, ρ::Float64)
     end
 end
 
-
 function plot_triangles_across_unit_disk(f, x, y)
     ret = []
     for (i, xx) in enumerate(x)
@@ -67,9 +42,6 @@ function plot_triangles_across_unit_disk(f, x, y)
         end
     ret
 end
-
-using SpecialFunctions
-using QuantumOptics
 
 function fidelity(ρ, σ)
     tr(sqrt(sqrt(ρ) * σ * sqrt(ρ)))^(1/2)
@@ -103,36 +75,65 @@ function unpack_zernike(zernike_coefficients_even, zernike_coefficients_odd, ρ,
     eventuples # No odd tuples, so we'll leave it simple. (In fact, only m=0 again but we'll test this.)
 end
 
+interionic_spacing = .1
+up_modifier = sqrt(3)/2 * interionic_spacing
+over_modifer = 1/2 * interionic_spacing
+points_inside_circle = []
+digits = 2
+radius = .5
+pairs, x, y = gen_points([0, 0], [], [], [])
+
+
 Γ = 1/62
 ω = 2*π*180E3
 θ = 0.;
-σ = .1
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-max_n = 10
-scale = 1
-zernikeeven = [[Q(i, r2, r1) for i in range(0, 10, step=1)]]
-zernikeodd = []
 evolution_time = 50E-6
 U = π/(evolution_time) * 2
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];
-
-μ = 0
-order =  0
-
-function evolution_evaluator_factory(ψ0, T, zernikeeven, zernikeodd, U, ψ, μ, ω, b)
-    function evaluator(ρ, ϕ)
-        H(t, _) = H_odf(ρ, ϕ, t, zernikeeven, zernikeodd, U, ψ, μ, ω)*sigmaz(b), [sigmam(b)], [dagger(sigmam(b))]
-        _, ψTARGET = timeevolution.master_dynamic(T, ψ0, H; rates=[Γ])
-        last(ψTARGET)
+σ1 = .1
+σ2 = 1
+function integrand(n, m)
+    function rtn(coor)
+        ρ = coor[1]
+        θ = coor[2]
+        x = ρ * cos(θ)
+        y = ρ * sin(θ)
+        Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
+    end
+    rtn
+end
+function neumann(m)
+    if m == 0
+        2
+    else
+        1
     end
 end
-function H_odf(ρ, ϕ, t, zernike_coefficients_even, zernike_coefficients_odd, U, ψ, μ, ω)
-    U * cos(sum([Q(i, r2, r1)*R(i,0,ρ) for i in range(0, max_n, step=1)]))
+function cond_eval(n, m)
+    if -n ≤ m ≤ n
+        (2*n+2)/(π*neumann(m)) * hcubature(integrand(n, m), [0., 0.], [1., 2*π], maxevals=10000)[1]
+    else
+        0
+    end
 end
-exact_evolution_evaluator = evolution_evaluator_factory(ψ0, T, zernikeeven, [], U, θ, 0., ω, b)
-
+data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, 40, step=1)]] for m in range(0, 30, step=1)]...);
+function recon(ρ, ϕ)
+    total = 0
+    for (n,x) in enumerate(eachrow(data))
+        for (m,y) in enumerate(x)
+            if m ≤ n
+                total += y*Z(n-1, m-1, ρ, ϕ)
+            end
+        end
+    end
+    total
+end
+function H_odf(ρ, ϕ, t, zernike_coefficients_even, zernike_coefficients_odd, U, ψ, μ, ω)
+    U * cos(recon(ρ, ϕ))
+end
 
 function infidelity_across_disk(F1, F2)
     function infidelity_polar(ρ, ϕ)
@@ -142,31 +143,40 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function annulus(a, b)
-    function rtn(ρ, ϕ)
-        if a < ρ < b
-            1
-        else
-            0
-        end
+function simultaneous_exact_evolution_evaluator_factory(ψ0, T, zernike_recon, U, θ, ω, b, maxm)
+    """Apply all the zernike coefficients given, in order, for time T each."""
+    orders = range(0, maxm, step=1)
+    function evaluator(ρ, ϕ)
+        H(t, _) = H_odf(ρ, ϕ, t, zernike_recon, U, θ, ω, orders)*sigmaz(b), [], []
+        _, ψ = timeevolution.master_dynamic(T, ψ0, H)
+        last(ψ)
     end
 end
 
-function annulus_spin_profile(ρ, ϕ)
+function gaussian_spin_profile(ρ, ϕ)
     ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-    H(t, _) = U * cos(annulus(r1, r2)(ρ, ϕ)) * sigmaz(b), [], []
+    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b), [], []
+    evolution_time = π/2
+    step_size = evolution_time/1
+    T = [0.0:step_size:evolution_time;];
     _, ψ = timeevolution.master_dynamic(T, ψ0, H)
     last(ψ)
 end
 
-z = plot_triangles_across_unit_disk(infidelity_across_disk(annulus_spin_profile, exact_evolution_evaluator), x, y)
-function circleShape(h, k, r)
-    θ = LinRange(0, 2*π, 500)
-    h .+ r*sin.(θ), k .+ r*cos.(θ)
-end
-using Plots
-#plot(x, y, seriestype = :scatter, title = "Top View of Penning Trap")
-scatter(x, y, marker_z = 100*z,  c = :heat)
-plot!(circleShape(0, 0, .5), seriestype = [:shape,], lw = .5, c=:blue, lincolor = :black, legend=false, fillalpha=0, aspect_ratio = 1, axis=nothing, border=:none, title="Log Infidelity")
-using DelimitedFiles
-writedlm("data.csv",  z, ',')
+Γ = 1/62
+ω = 2*π*180E3
+θ = -π/2;
+max_order = 0
+b = SpinBasis(1//2)
+ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
+evolution_time =  50E-6
+U = π/(evolution_time)
+step_size = evolution_time
+T = [0.0:step_size:evolution_time;];
+simultaneous_exact_evolution = simultaneous_exact_evolution_evaluator_factory(ψ0, T, recon, U, θ, ω, b, max_order)
+x = ARGS[1]
+y = ARGS[2]
+ρ = sqrt(x^2 + y^2)
+ϕ = atan(y, x)
+z = infidelity_across_disk(simultaneous_exact_evolution, gaussian_spin_profile)(ρ, ϕ)
+writedlm("data$x,$y.csv",  z, ',')

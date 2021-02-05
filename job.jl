@@ -128,12 +128,8 @@ function recon(ρ, ϕ)
     total
 end
 
-function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, ω, orders)
-    total = 0
-    for order in orders
-        total += U * cos(-order*ω*t + ψ + zernike_recon(ρ, ϕ))
-    end
-    total
+function H_odf(ρ, ϕ, t, zernike_coefficients_even, zernike_coefficients_odd, U, ψ, μ, ω)
+    U * cos(-μ*t + ψ + zernike_recon(ρ, ϕ))
 end
 
 function infidelity_across_disk(F1, F2)
@@ -144,15 +140,23 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function simultaneous_exact_evolution_evaluator_factory(ψ0, T, zernike_recon, U, θ, ω, b, maxm)
+function sequential_exact_evolution_evaluator_factory(ψ0, T, zernikeeven, zernikeodd, U, θ, ω, b)
     """Apply all the zernike coefficients given, in order, for time T each."""
     orders = range(0, maxm, step=1)
     function evaluator(ρ, ϕ)
-        H(t, _) = H_odf(ρ, ϕ, t, zernike_recon, U, θ, ω, orders)*sigmaz(b), [], []
-        _, ψ = timeevolution.master_dynamic(T, ψ0, H)
-        last(ψ)
+        ψ = ψ0
+        for order in orders
+            println(order)
+            flush(stdout)
+            μ = order * ω
+            H(t, _) = H_odf(ρ, ϕ, t, zernikeeven, zernikeodd, U, θ, μ, ω)*sigmaz(b), [], []
+            _, ψ = @skiptimechecks timeevolution.master_dynamic(T, ψ, H)
+            ψ = last(ψ)
+        end
+        ψ
     end
 end
+
 
 function gaussian_spin_profile(ρ, ϕ)
     ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
@@ -174,7 +178,7 @@ evolution_time =  50E-6
 U = π/(evolution_time)
 step_size = evolution_time
 T = [0.0:step_size:evolution_time;];
-simultaneous_exact_evolution = simultaneous_exact_evolution_evaluator_factory(ψ0, T, recon, U, θ, ω, b, max_order)
+sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_m, U, θ, ω, b)
 x = parse(Float64, ARGS[1])
 y = parse(Float64, ARGS[2])
 ρ = sqrt(x^2 + y^2)

@@ -129,7 +129,7 @@ function recon(ρ, ϕ)
 end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, μ, ω)
-    U * cos(-μ*t + ψ + zernike_recon(ρ, ϕ))
+    U/.1 * cos(-μ*t + ψ + .1*zernike_recon(ρ, ϕ))
 end
 
 function infidelity_across_disk(F1, F2)

@@ -82,30 +82,25 @@ evolution_time = 50E-6
 U = π/(evolution_time) * 2
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];
-
 σ1 = .1
-σ2 = .1
+σ2 = 1
 function gaussian(σ1, σ2)
     function func(ρ, ϕ)
-        x = ρ*cos(ϕ) - .25
-        y = ρ*sin(ϕ)- .27
+        x = ρ*cos(ϕ)
+        y = ρ*sin(ϕ)
         exp(-x^2/σ1^2 + -y^2/σ2^2)
     end
 end
-
-
-displacement =
 function integrand(n, m)
     function rtn(coor)
         ρ = coor[1]
         θ = coor[2]
-        x = ρ * cos(θ) - .25
-        y = ρ * sin(θ) - .27
+        x = ρ * cos(θ)
+        y = ρ * sin(θ)
         Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
     end
     rtn
 end
-
 function neumann(m)
     if m == 0
         2
@@ -120,15 +115,13 @@ function cond_eval(n, m)
         0
     end
 end
-data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, 50, step=1)]] for m in range(0, 20, step=1)]...);
-dataodd = hcat([[c[1] for c in [cond_eval(n, -m) for n in range(0, 50, step=1)]] for m in range(0, 20, step=1)]...);
+data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, 40, step=1)]] for m in range(0, 30, step=1)]...);
 function recon(ρ, ϕ)
     total = 0
     for (n,x) in enumerate(eachrow(data))
         for (m,y) in enumerate(x)
             if m ≤ n
                 total += y*Z(n-1, m-1, ρ, ϕ)
-                total += dataodd[n, m]*Z(n-1, -(m-1), ρ, ϕ)
             end
         end
     end
@@ -179,7 +172,7 @@ end
 Γ = 1/62
 ω = 2*π*180E3
 θ = -π/2;
-max_order = 20
+max_order = 30
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 evolution_time =  50E-6

@@ -176,9 +176,9 @@ end
 max_order = 30
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-evolution_time =  50E-6
-U = π/(evolution_time*2)
-step_size = evolution_time
+U = 2 * π * 10E3
+evolution_time = π/(2*U*amp)
+step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];
 sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_order, U, θ, ω, b)
 x = parse(Float64, ARGS[1])

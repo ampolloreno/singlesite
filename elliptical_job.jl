@@ -73,13 +73,14 @@ function unpack_zernike(zernike_coefficients_even, zernike_coefficients_odd, ρ,
 end
 
 
+amp = .5
 Γ = 1/62
 ω = 2*π*180E3
 θ = 0.;
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-evolution_time = 50E-6
-U = π/(evolution_time) * 2
+U = 2 * π * 10E3
+evolution_time = π/(2*U*amp)
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];
 σ1 = .1
@@ -88,7 +89,7 @@ function gaussian(σ1, σ2)
     function func(ρ, ϕ)
         x = ρ*cos(ϕ)
         y = ρ*sin(ϕ)
-        exp(-x^2/σ1^2 + -y^2/σ2^2)
+        amp*exp(-x^2/σ1^2 + -y^2/σ2^2)
     end
 end
 function integrand(n, m)
@@ -97,7 +98,7 @@ function integrand(n, m)
         θ = coor[2]
         x = ρ * cos(θ)
         y = ρ * sin(θ)
-        Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
+        amp*Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
     end
     rtn
 end
@@ -129,7 +130,7 @@ function recon(ρ, ϕ)
 end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, μ, ω)
-    U/.1 * cos(-μ*t + ψ + .1*zernike_recon(ρ, ϕ))
+    U * cos(-μ*t + ψ + zernike_recon(ρ, ϕ))
 end
 
 function infidelity_across_disk(F1, F2)
@@ -162,7 +163,7 @@ end
 function gaussian_spin_profile(ρ, ϕ)
     ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
     H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b), [], []
-    evolution_time = π/2
+    evolution_time = π/(2*amp)
     step_size = evolution_time/1
     T = [0.0:step_size:evolution_time;];
     _, ψ = timeevolution.master_dynamic(T, ψ0, H)

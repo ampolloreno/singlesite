@@ -73,18 +73,7 @@ function unpack_zernike(zernike_coefficients_even, zernike_coefficients_odd, ρ,
 end
 
 
-amp = .1
-Γ = 1/62
-ω = 2*π*180E3
-θ = 0.;
-b = SpinBasis(1//2)
-ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-U = 2 * π * 10E3
-evolution_time = π/(U*amp)
-step_size = evolution_time/1
-T = [0.0:step_size:evolution_time;];
-σ1 = .1
-σ2 = 1
+
 function gaussian(σ1, σ2)
     function func(ρ, ϕ)
         x = ρ*cos(ϕ)
@@ -170,10 +159,13 @@ function gaussian_spin_profile(ρ, ϕ)
     last(ψ)
 end
 
+amp = .1
 Γ = 1/62
+σ1 = .1
+σ2 = 1
 ω = 2*π*180E3
 θ = -π/2;
-max_order = 100
+max_order = 20
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = 2 * π * 10E3

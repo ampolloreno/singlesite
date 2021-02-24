@@ -73,7 +73,7 @@ function unpack_zernike(zernike_coefficients_even, zernike_coefficients_odd, ρ,
 end
 
 
-amp = .5
+amp = .1
 Γ = 1/62
 ω = 2*π*180E3
 θ = 0.;

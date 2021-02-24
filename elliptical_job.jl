@@ -25,8 +25,8 @@ function gaussian(σ1, σ2)
     end
 end
 
-function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, μ, ω)
-    U * cos(-μ*t + ψ + gaussian(σ1, σ2)(ρ, ϕ))
+function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, orders, ω)
+    sum([U * cos(-order*ω*t + ψ + gaussian(σ1, σ2)(ρ, ϕ)) for order in orders])
 end
 
 function infidelity_across_disk(F1, F2)
@@ -43,15 +43,9 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     orders = range(0, maxm, step=1)
     function evaluator(ρ, ϕ)
         ψ = ψ0
-        for order in orders
-            println(order)
-            flush(stdout)
-            μ = order * ω
-            H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, μ, ω)*sigmaz(b), [], []
-            _, ψ = @skiptimechecks timeevolution.master_dynamic(T, ψ, H)
-            ψ = last(ψ)
-        end
-        ψ
+        H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, orders, ω)*sigmaz(b), [], []
+        _, ψ = @skiptimechecks timeevolution.master_dynamic(T, ψ, H)
+        ψ = last(ψ)
     end
 end
 

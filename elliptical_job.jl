@@ -3,6 +3,12 @@ using QuantumOptics
 using ArgParse
 using Cubature
 using DelimitedFiles
+
+
+σ1 = .1
+σ2 = 1
+amp = .1
+
 start = time()
 println(start)
 flush(stdout)
@@ -159,10 +165,7 @@ function gaussian_spin_profile(ρ, ϕ)
     last(ψ)
 end
 
-amp = .1
 Γ = 1/62
-σ1 = .1
-σ2 = 1
 ω = 2*π*180E3
 θ = -π/2;
 max_order = 20

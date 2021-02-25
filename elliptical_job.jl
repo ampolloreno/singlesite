@@ -7,7 +7,7 @@ using DelimitedFiles
 
 σ1 = .1
 σ2 = 1
-amp = .1
+amp = .01
 
 start = time()
 println(start)
@@ -62,7 +62,7 @@ end
 Γ = 1/62
 ω = 2*π*180E3
 θ = -π/2;
-max_order = 20
+max_order = 30
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = 2 * π * 10E3

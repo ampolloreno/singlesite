@@ -26,7 +26,7 @@ function gaussian(σ1, σ2)
 end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, orders, ω)
-    sum([U * cos(-order*ω*t + ψ + gaussian(σ1, σ2)(ρ, ϕ)) for order in orders])
+    sum([U * cos(-order*ω*t + ψ + gaussian(σ1, σ2)(ρ, ϕ-ω*t)) for order in orders])
 end
 
 function infidelity_across_disk(F1, F2)
@@ -62,7 +62,7 @@ end
 Γ = 1/62
 ω = 2*π*180E3
 θ = -π/2;
-max_order = 1
+max_order = 10
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = 2 * π * 10E3

@@ -7,7 +7,7 @@ using DelimitedFiles
 
 σ1 = .1
 σ2 = 1
-amp = .001
+amp = .1
 
 start = time()
 println(start)
@@ -66,7 +66,7 @@ max_order = 20
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = 2 * π * 10E3
-evolution_time = π/(2*U*amp)
+evolution_time = π/(U*amp)
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];
 sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_order, U, θ, ω, b)

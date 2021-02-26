@@ -26,7 +26,7 @@ function gaussian(σ1, σ2)
 end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, orders, ω)
-    sum([U * cos(-order*ω*t + ψ + gaussian(σ1, σ2)(ρ, ϕ+ω*t)) for order in orders])
+    sum([U * cos(-order*ω*t + ψ - gaussian(σ1, σ2)(ρ, ϕ-ω*t)) for order in orders])
 end
 
 function infidelity_across_disk(F1, F2)

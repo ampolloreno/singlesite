@@ -48,6 +48,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
             _, ψ = timeevolution.master_dynamic(T, ψ, H)
             ψ = last(ψ)
         end
+        ψ
     end
 end
 

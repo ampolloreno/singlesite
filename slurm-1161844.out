@@ -1,5 +1,0 @@
-1.614379687766767e9
-1.614379786651662e9
-98.88489508628845
-┌ Warning: Interrupted. Larger maxiters is needed.
-└ @ SciMLBase ~/.julia/packages/SciMLBase/89t7c/src/integrator_interface.jl:328

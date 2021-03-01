@@ -6,7 +6,7 @@ using DelimitedFiles
 
 
 σ1 = .1
-σ2 = .1
+σ2 = 1
 amp = .0001
 
 start = time()

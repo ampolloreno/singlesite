@@ -5,7 +5,7 @@ using Cubature
 using DelimitedFiles
 
 
-σ1 = .1
+σ1 = .2
 σ2 = .1
 amp = .001
 

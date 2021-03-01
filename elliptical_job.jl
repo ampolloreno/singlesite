@@ -14,7 +14,11 @@ println(start)
 flush(stdout)
 
 function fidelity(ρ, σ)
-    tr(sqrt(sqrt(ρ) * σ * sqrt(ρ)))^(1/2)
+    ρ = ρ/norm(ρ)
+    σ = σ/norm(σ)
+    f = abs(conj(transpose(ρ))*σ)^2
+    print(f)
+    f
 end
 
 function gaussian(σ1, σ2)
@@ -44,8 +48,8 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     function evaluator(ρ, ϕ)
         ψ = ψ0
         for order in orders
-            H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order, ω)*sigmaz(b), [], []
-            _, ψ = timeevolution.master_dynamic(T, ψ, H)
+            H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order, ω)*sigmaz(b)
+            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H)
             ψ = last(ψ)
         end
         ψ
@@ -58,7 +62,7 @@ function gaussian_spin_profile(ρ, ϕ)
     evolution_time = π/(2*amp)
     step_size = evolution_time/1
     T = [0.0:step_size:evolution_time;];
-    _, ψ = timeevolution.master_dynamic(T, ψ0, H)
+    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)
     last(ψ)
 end
 

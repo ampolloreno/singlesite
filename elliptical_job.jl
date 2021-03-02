@@ -7,7 +7,7 @@ using DelimitedFiles
 
 σ1 = .2
 σ2 = .1
-amp = .001
+amp = .01
 
 start = time()
 println(start)
@@ -66,14 +66,14 @@ function gaussian_spin_profile(ρ, ϕ)
     last(ψ)
 end
 
-Γ = 1/62
 ω = 2*π*180E3
 θ = -π/2;
+# From numerical experiments it seems like 40 is sufficient to match the pattern for .1, 1., to an accuracy of .003.
 max_order = 40 
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = 2 * π * 10E3
-evolution_time = π/(2*U*amp)
+evolution_time = π/(U*amp)
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];
 sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_order, U, θ, ω, b)

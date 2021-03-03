@@ -7,7 +7,7 @@ using DelimitedFiles
 
 σ1 = .1
 σ2 = 1 
-amp = .1
+amp = .01
 
 start = time()
 println(start)
@@ -72,7 +72,7 @@ end
 max_order = 40 
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-U = 2 * π * 10E1
+U = 2 * π * 10E2
 evolution_time = π/(2*U*amp)
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];

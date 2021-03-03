@@ -49,7 +49,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
         ψ = ψ0
         for order in orders
             H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order, ω)*sigmaz(b)
-            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e6)
+            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
             ψ = last(ψ)
         end
         ψ
@@ -62,7 +62,7 @@ function gaussian_spin_profile(ρ, ϕ)
     evolution_time = π/(2*amp)
     step_size = evolution_time/1
     T = [0.0:step_size:evolution_time;];
-    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H; maxiters=1e6)
+    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H; maxiters=1e10)
     last(ψ)
 end
 

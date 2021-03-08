@@ -6,7 +6,7 @@ using DelimitedFiles
 
 
 σ1 = .1
-σ2 = .2 
+σ2 = 1
 amp = .01
 
 start = time()
@@ -30,7 +30,14 @@ function gaussian(σ1, σ2)
 end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, orders, ω)
-    sum([U * cos(-order*ω*t + ψ + gaussian(σ1, σ2)(ρ, ϕ-ω*t)) for order in orders])
+    total = 0
+    n = 0
+    while n < max_order
+        if order ≤ n
+            total += data[n, order] * Z(n, m, ρ, ϕ-ω*t)
+        end
+    end
+    U * cos(-order*ω*t + ψ + total)
 end
 
 function infidelity_across_disk(F1, F2)
@@ -47,9 +54,12 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     orders = range(-maxm, maxm, step=1)
     function evaluator(ρ, ϕ)
         ψ = ψ0
-        H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, orders, ω)*sigmaz(b)
-        _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
-        ψ = last(ψ)
+        for order in order
+            H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order, ω)*sigmaz(b)
+            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
+            ψ = last(ψ)
+        end
+        ψ
     end
 end
 
@@ -63,10 +73,63 @@ function gaussian_spin_profile(ρ, ϕ)
     last(ψ)
 end
 
+function R(n::Int64, m::Int64, ρ::Float64)
+    if (n - m) % 2 != 0
+        0
+    else
+        function summand(k)
+            n = big(n)
+            k = big(k)
+            (-1)^k * factorial(n-k)/(factorial(k)*factorial(Int((n+m)/2) - k)*factorial(Int((n-m)/2) - k))*(ρ)^(n-2*k)
+        end
+        mapreduce(summand, +, Array(range(0, stop=Int((n-m)/2), step=1)))
+    end
+end
+
+function Z(n, m, ρ, θ)
+    if m < 0
+        R(n, abs(m), ρ) * sin(abs(m) * θ)
+    else
+        R(n, m, ρ) * cos(m * θ)
+    end
+end
+
+function integrand(n, m)
+    function rtn(coor)
+        ρ = coor[1]
+        θ = coor[2]
+        x = ρ * cos(θ)
+        y = ρ * sin(θ)
+        Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
+    end
+    rtn
+end
+
+function neumann(m)
+    if m == 0
+        2
+    else
+        1
+    end
+end
+
+function cond_eval(n, m)
+    if -n ≤ m ≤ n
+        (2*n+2)/(π*neumann(m)) * hcubature(integrand(n, m), [0., 0.], [1., 2*π], maxevals=10000)[1]
+    else
+        0
+    end
+end
+
+maxm = 40
+data = [[c[1] for c in [cond_eval(n, m) for n in range(0, maxm, step=1)]] for m in range(0, maxm, step=1)]
+
+
+
 ω = 2*π*180E3
 θ = -π/2;
 # From numerical experiments it seems like 40 is sufficient to match the pattern for .1, 1., to an accuracy of .003.
-max_order = 20
+max_order = 40
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = BigFloat(2 * π * 10E2)

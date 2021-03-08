@@ -44,7 +44,7 @@ end
 
 function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
     """Apply all the zernike coefficients given, in order, for time T each."""
-    orders = range(-maxm, maxm, step=1)
+    orders = range(0, maxm, step=1)
     function evaluator(ρ, ϕ)
         ψ = ψ0
         H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, orders, ω)*sigmaz(b)
@@ -66,7 +66,7 @@ end
 ω = 2*π*180E3
 θ = -π/2;
 # From numerical experiments it seems like 40 is sufficient to match the pattern for .1, 1., to an accuracy of .003.
-max_order = 60
+max_order = 40
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = BigFloat(2 * π * 10E2)

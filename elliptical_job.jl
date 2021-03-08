@@ -29,7 +29,7 @@ function gaussian(σ1, σ2)
     end
 end
 
-function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, orders, ω)
+function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order, ω)
     total = 0
     n = 0
     while n < max_order

@@ -69,7 +69,7 @@ end
 max_order = 10
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-U = BigFloat(2 * π * 10E1)
+U = BigFloat(2 * π * 10E2)
 evolution_time = π/(2*U*amp)
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];

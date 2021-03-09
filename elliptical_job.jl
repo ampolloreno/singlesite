@@ -6,8 +6,8 @@ using DelimitedFiles
 
 
 σ1 = .1
-σ2 = 1
-amp = .01
+σ2 = .2
+amp = .001
 
 start = time()
 println(start)
@@ -32,7 +32,7 @@ end
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order, ω)
     total = 0
     n = 0
-    while n < max_order
+    while n < maxn
         if order ≤ n
             total += data[n, order] * Z(n, m, ρ, ϕ-ω*t)
         end
@@ -51,7 +51,7 @@ end
 
 function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
     """Apply all the zernike coefficients given, in order, for time T each."""
-    orders = range(-maxm, maxm, step=1)
+    orders = range(0, maxm, step=1)
     function evaluator(ρ, ϕ)
         ψ = ψ0
         for order in order
@@ -121,15 +121,15 @@ function cond_eval(n, m)
     end
 end
 
-maxm = 40
-data = [[c[1] for c in [cond_eval(n, m) for n in range(0, maxm, step=1)]] for m in range(0, maxm, step=1)]
+maxn = 40
+max_order = 15
+data = [[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]
 
 
 
 ω = 2*π*180E3
 θ = -π/2;
 # From numerical experiments it seems like 40 is sufficient to match the pattern for .1, 1., to an accuracy of .003.
-max_order = 40
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = BigFloat(2 * π * 10E2)

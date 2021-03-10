@@ -34,8 +34,9 @@ function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order, ω)
     n = 0
     while n < maxn
         if order ≤ n
-            total += data[n, order] * Z(n, m, ρ, ϕ-ω*t)
+            total += data[n+1, order+1] * Z(n, order, ρ, ϕ-ω*t)
         end
+        n+=1
     end
     U * cos(-order*ω*t + ψ + total)
 end
@@ -54,7 +55,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     orders = range(0, maxm, step=1)
     function evaluator(ρ, ϕ)
         ψ = ψ0
-        for order in order
+        for order in orders
             H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order, ω)*sigmaz(b)
             _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
             ψ = last(ψ)
@@ -121,9 +122,9 @@ function cond_eval(n, m)
     end
 end
 
-maxn = 40
-max_order = 15
-data = [[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]
+maxn = 10
+max_order = 10
+data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 
 
@@ -142,9 +143,9 @@ y = parse(Float64, ARGS[2])
 ρ = sqrt(x^2 + y^2)
 ϕ = atan(y, x)
 infid, ψ1, ψ2 = infidelity_across_disk(sequential_exact_evolution, gaussian_spin_profile)(ρ, ϕ)
-writedlm("infid$x,$y.csv",  infid, ',')
-writedlm("seq$x,$y.csv",  ψ1, ',')
-writedlm("gauss$x,$y.csv",  ψ2, ',')
+writedlm("2infid$x,$y.csv",  infid, ',')
+writedlm("2seq$x,$y.csv",  ψ1, ',')
+writedlm("2gauss$x,$y.csv",  ψ2, ',')
 stop = time()
 println(stop)
 println(stop-start)

@@ -7,7 +7,7 @@ using DelimitedFiles
 
 σ1 = .1
 σ2 = .2
-amp = .001
+amp = .01
 
 start = time()
 println(start)
@@ -34,7 +34,7 @@ function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order, ω)
     n = 0
     while n < maxn
         if order ≤ n
-            total += data[n+1, order+1] * Z(n, order, ρ, ϕ-ω*t)
+            total += amp*data[n+1, order+1] * Z(n, order, ρ, ϕ-ω*t)
         end
         n+=1
     end
@@ -122,8 +122,8 @@ function cond_eval(n, m)
     end
 end
 
-maxn = 10
-max_order = 10
+maxn = 50
+max_order = 20
 data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 

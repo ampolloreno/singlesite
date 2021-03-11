@@ -6,8 +6,8 @@ using DelimitedFiles
 
 
 σ1 = .1
-σ2 = .22 
-amp = .01
+σ2 = .2 
+amp = .001
 
 start = time()
 println(start)

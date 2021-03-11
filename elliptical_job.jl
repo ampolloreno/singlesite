@@ -120,8 +120,8 @@ function cond_eval(n, m)
     end
 end
 
-maxn = 10
-max_order = 10
+maxn = 40
+max_order = 0
 data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 

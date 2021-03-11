@@ -1,0 +1,19 @@
+1.615487377363446e9
+0.99998498466888071.615487417408086e9
+40.0446400642395
+[ Info: Defining absense of feature x86_64_xsavec.
+[ Info: Defining absense of feature x86_64_mpx.
+[ Info: Defining absense of feature x86_64_xsaves.
+[ Info: Defining absense of feature x86_64_avx512vnni.
+[ Info: Defining absense of feature x86_64_clwb.
+[ Info: Defining absense of feature x86_64_avx512f.
+[ Info: Defining absense of feature x86_64_pku.
+[ Info: Defining absense of feature x86_64_avx512bw.
+[ Info: Defining absense of feature x86_64_clflushopt.
+[ Info: Defining absense of feature x86_64_avx512vl.
+[ Info: Defining absense of feature x86_64_avx512cd.
+[ Info: Defining presence of feature x86_64_rtm.
+[ Info: Defining absense of feature x86_64_avx512dq.
+[ Info: Defining CPU name.
+[ Info: Redefining cache 2.
+[ Info: Redefining cache 3.

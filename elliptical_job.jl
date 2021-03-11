@@ -6,7 +6,7 @@ using DelimitedFiles
 
 
 σ1 = .1
-σ2 = .2
+σ2 = .1 
 amp = .01
 
 start = time()
@@ -29,16 +29,12 @@ function gaussian(σ1, σ2)
     end
 end
 
-function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order, ω)
+function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
     total = 0
-    n = 0
-    while n < maxn
-        if order ≤ n
-            total += amp*data[n+1, order+1] * Z(n, order, ρ, ϕ-ω*t)
-        end
-        n+=1
+    if order1 ≤ order2
+        total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
     end
-    U * cos(-order*ω*t + ψ + total)
+    U * cos(-order1*ω*t + ψ + total)
 end
 
 function infidelity_across_disk(F1, F2)
@@ -55,10 +51,12 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     orders = range(0, maxm, step=1)
     function evaluator(ρ, ϕ)
         ψ = ψ0
-        for order in orders
-            H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order, ω)*sigmaz(b)
-            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
-            ψ = last(ψ)
+        for order1 in orders
+            for order2 in range(0, maxn, step=1)
+                H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
+                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
+                ψ = last(ψ)
+            end
         end
         ψ
     end
@@ -122,18 +120,17 @@ function cond_eval(n, m)
     end
 end
 
-maxn = 40
-max_order = 15
+maxn = 10
+max_order = 10
 data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 
-
-ω = 2*π*180E4
+ω = 2*π*180E3
 θ = -π/2;
 # From numerical experiments it seems like 40 is sufficient to match the pattern for .1, 1., to an accuracy of .003.
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-U = BigFloat(2 * π * 10E2)
+U = BigFloat(2 * π * 10E3)
 evolution_time = π/(2*U*amp)
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];

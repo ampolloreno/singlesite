@@ -34,7 +34,7 @@ function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
     if order1 ≤ order2
         total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
     end
-    U * cos(-order1*ω*t + ψ + total)
+    U * sin(-order1*ω*t + ψ + total)
 end
 
 function infidelity_across_disk(F1, F2)

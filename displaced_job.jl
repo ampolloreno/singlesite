@@ -34,7 +34,6 @@ function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
     if abs(order1) ≤ order2
         if order1 >= 0
             total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
-        end
         else
             total += amp*data2[order2+1, abs(order1)+1] * Z(order2, order1, ρ, ϕ-ω*t)
         end

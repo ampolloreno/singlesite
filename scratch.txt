@@ -27,4 +27,4 @@
 # The following example runs a MATLAB program stored in example.m
 # Replace this with commands to run your job. 
 
-~/julia-1.5.3/bin/julia ~/repos/singlesite/elliptical_job.jl -0.3 0.36
+~/julia-1.5.3/bin/julia ~/repos/singlesite/displaced_job.jl -0.3 0.36

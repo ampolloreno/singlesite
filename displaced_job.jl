@@ -6,7 +6,7 @@ using DelimitedFiles
 
 
 σ1 = .1
-σ2 = .1
+σ2 = .1  
 amp= .1 #bringing this up to .1 fixed it, I have no idea why...
 
 start = time()
@@ -23,22 +23,18 @@ end
 
 function gaussian(σ1, σ2)
     function func(ρ, ϕ)
-        x = ρ * cos(θ) - .25
-        y = ρ * sin(θ) - .27
+        x = ρ*cos(ϕ) - .25
+        y = ρ*sin(ϕ) - .27
         amp*exp(-x^2/σ1^2 + -y^2/σ2^2)
     end
 end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
     total = 0
-    if abs(order1) ≤ order2
-        if order1 >= 0
-            total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
-        else
-            total += amp*data2[order2+1, abs(order1)+1] * Z(order2, order1, ρ, ϕ-ω*t)
-        end
+    if order1 ≤ order2
+        total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
     end
-    U * cos(-abs(order1)*ω*t + ψ + total)
+    U * cos(-order1*ω*t + ψ + total)
 end
 
 function infidelity_across_disk(F1, F2)
@@ -52,7 +48,7 @@ end
 
 function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
     """Apply all the zernike coefficients given, in order, for time T each."""
-    orders = range(-maxm, maxm, step=1)
+    orders = range(0, maxm, step=1)
     function evaluator(ρ, ϕ)
         ψ = ψ0
         for order1 in orders
@@ -101,8 +97,8 @@ function integrand(n, m)
     function rtn(coor)
         ρ = coor[1]
         θ = coor[2]
-        x = ρ * cos(θ) - .25
-        y = ρ * sin(θ) - .27
+        x = ρ * cos(θ)
+        y = ρ * sin(θ)
         Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
     end
     rtn
@@ -127,7 +123,6 @@ end
 maxn = 40
 max_order = 15
 data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
-data2 = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, -max_order, step=-1)]...)
 
 
 ω = 2*π*180E3

@@ -31,10 +31,10 @@ end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
     total = 0
-   # if order1 ≤ order2
-   #     total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
-   # end
-    U * cos(-order1*ω*t + ψ + gaussian(σ1, σ2)(ρ, ϕ-ω*t))
+    if order1 ≤ order2
+        total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
+    end
+    U * cos(-order1*ω*t + ψ + total)
 end
 
 function infidelity_across_disk(F1, F2)
@@ -52,9 +52,11 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     function evaluator(ρ, ϕ)
         ψ = ψ0
         for order1 in orders
-            H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, 0, ω)*sigmaz(b)
-            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
-            ψ = last(ψ)
+            for order2 in range(0, maxn, step=1)
+                H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
+                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
+                ψ = last(ψ)
+            end
         end
         ψ
     end

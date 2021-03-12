@@ -31,10 +31,14 @@ end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
     total = 0
-    if order1 ≤ order2
-        total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
+    if abs(order1) ≤ order2
+        if order1 >= 0
+            total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
+        else
+            total += amp*data2[order2+1, abs(order1)+1] * Z(order2, order1, ρ, ϕ-ω*t)
+        end
     end
-    U * cos(-order1*ω*t + ψ + total)
+    U * cos(-abs(order1)*ω*t + ψ + total)
 end
 
 function infidelity_across_disk(F1, F2)
@@ -97,8 +101,8 @@ function integrand(n, m)
     function rtn(coor)
         ρ = coor[1]
         θ = coor[2]
-        x = ρ * cos(θ)
-        y = ρ * sin(θ)
+        x = ρ * cos(θ) - .25
+        y = ρ * sin(θ) - .27
         Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
     end
     rtn
@@ -123,6 +127,7 @@ end
 maxn = 40
 max_order = 15
 data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
+data2 = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, -max_order, step=-1)]...)
 
 
 ω = 2*π*180E3

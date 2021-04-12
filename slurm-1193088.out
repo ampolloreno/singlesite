@@ -1,9 +1,0 @@
-1.615566491598964e9
-ERROR: LoadError: UndefVarError: order1 not defined
-Stacktrace:
- [1] top-level scope at /users/smith/anpo0771/repos/singlesite/displaced_job.jl:42
- [2] include(::Function, ::Module, ::String) at ./Base.jl:380
- [3] include(::Module, ::String) at ./Base.jl:368
- [4] exec_options(::Base.JLOptions) at ./client.jl:296
- [5] _start() at ./client.jl:506
-in expression starting at /users/smith/anpo0771/repos/singlesite/displaced_job.jl:42

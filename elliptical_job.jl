@@ -7,7 +7,7 @@ using DelimitedFiles
 
 σ1 = .1
 σ2 = 1  
-amp= .01 #bringing this up to .1 fixed it, I have no idea why...
+amp= .1 #bringing this up to .1 fixed it, I have no idea why...
 
 start = time()
 println(start)
@@ -120,17 +120,17 @@ function cond_eval(n, m)
     end
 end
 
-maxn = 40
+maxn = 30
 max_order = 15
 data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 
-ω = 2*π*180E4
+ω = 2*π*180E5
 θ = -π/2;
 # From numerical experiments it seems like 40 is sufficient to match the pattern for .1, 1., to an accuracy of .003.
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-U = BigFloat(2 * π * 10E4) #bringing this up
+U = BigFloat(2 * π * 10E3) 
 evolution_time = π/(2*U*amp)
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];

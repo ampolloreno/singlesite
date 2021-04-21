@@ -7,15 +7,15 @@ using DelimitedFiles
 
 σ1 = .1
 σ2 = 1  
-amp= .0999 #bringing this up to .1 fixed it, I have no idea why...
+amp= .09 #bringing this up to .1 fixed it, I have no idea why...
 
 start = time()
 println(start)
 flush(stdout)
 
 function fidelity(ρ, σ)
-    ρ = ρ/norm(ρ)
-    σ = σ/norm(σ)
+    #ρ = ρ/norm(ρ)
+    #σ = σ/norm(σ)
     f = abs(conj(transpose(ρ))*σ)^2
     print(f)
     f
@@ -131,6 +131,7 @@ data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] f
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = BigFloat(2 * π * 10E3)
+amp=.1
 evolution_time = π/(2*U*amp)
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];

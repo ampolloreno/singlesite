@@ -131,10 +131,10 @@ data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] f
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = BigFloat(2 * π * 10E3)
-evolution_time =.0005
+#evolution_time =.0005
 U = π/(2*evolution_time*amp)
-#evolution_time = π/(2*U*amp)
-ω = 2*π*180E3/(2 * π * 10E3) * U
+evolution_time = π/(2*U*amp)
+#ω = 2*π*180E3/(2 * π * 10E3) * U
 step_size = evolution_time/1
 T = [0.0:step_size:evolution_time;];
 sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_order, U, θ, ω, b)

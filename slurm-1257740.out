@@ -1,0 +1,30 @@
+┌ Warning: Module StochasticDiffEq with build ID 23313968613441580 is missing from the cache.
+│ This may mean StochasticDiffEq [789caeaf-c7a9-5a7d-9973-96adeb23e2a0] does not support precompilation but is imported by a module that does.
+└ @ Base loading.jl:1017
+┌ Warning: Module StochasticDiffEq with build ID 23313968613441580 is missing from the cache.
+│ This may mean StochasticDiffEq [789caeaf-c7a9-5a7d-9973-96adeb23e2a0] does not support precompilation but is imported by a module that does.
+└ @ Base loading.jl:1017
+┌ Warning: Module Distributions with build ID 23313921322377203 is missing from the cache.
+│ This may mean Distributions [31c24e10-a181-5473-b8eb-7969acd0382f] does not support precompilation but is imported by a module that does.
+└ @ Base loading.jl:1017
+┌ Warning: Module Distributions with build ID 23313921322377203 is missing from the cache.
+│ This may mean Distributions [31c24e10-a181-5473-b8eb-7969acd0382f] does not support precompilation but is imported by a module that does.
+└ @ Base loading.jl:1017
+┌ Warning: Module Distributions with build ID 23313921322377203 is missing from the cache.
+│ This may mean Distributions [31c24e10-a181-5473-b8eb-7969acd0382f] does not support precompilation but is imported by a module that does.
+└ @ Base loading.jl:1017
+1.61910809614776e9
+┌ Warning: Instability detected. Aborting
+└ @ SciMLBase ~/.julia/packages/SciMLBase/89t7c/src/integrator_interface.jl:348
+ERROR: LoadError: BoundsError: attempt to access 0-element Array{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},1} at index [0]
+Stacktrace:
+ [1] getindex at ./array.jl:809 [inlined]
+ [2] last at ./abstractarray.jl:362 [inlined]
+ [3] (::var"#evaluator#3"{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},Array{BigFloat,1},BigFloat,Float64,Float64,SpinBasis{1//2,Int64},StepRange{Int64,Int64}})(::Float64, ::Float64) at /users/smith/anpo0771/repos/singlesite/elliptical_job.jl:59
+ [4] (::var"#infidelity_polar#2"{var"#evaluator#3"{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},Array{BigFloat,1},BigFloat,Float64,Float64,SpinBasis{1//2,Int64},StepRange{Int64,Int64}},typeof(gaussian_spin_profile)})(::Float64, ::Float64) at /users/smith/anpo0771/repos/singlesite/elliptical_job.jl:43
+ [5] top-level scope at /users/smith/anpo0771/repos/singlesite/elliptical_job.jl:146
+ [6] include(::Function, ::Module, ::String) at ./Base.jl:380
+ [7] include(::Module, ::String) at ./Base.jl:368
+ [8] exec_options(::Base.JLOptions) at ./client.jl:296
+ [9] _start() at ./client.jl:506
+in expression starting at /users/smith/anpo0771/repos/singlesite/elliptical_job.jl:146

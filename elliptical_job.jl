@@ -4,11 +4,11 @@ using ArgParse
 using Cubature
 using DelimitedFiles
 using DifferentialEquations
-
+using Sundials
 
 σ1 = .1
 σ2 = 1  
-amp= .1 #bringing this up to .1 fixed it, I have no idea why...
+amp= BigFloat(.1) #bringing this up to .1 fixed it, I have no idea why...
 
 start = time()
 println(start)
@@ -55,7 +55,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
         for order1 in orders
             for order2 in range(0, maxn, step=1)
                 H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
-                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; alg=OrdinaryDiffEq.Rodas5(autodiff=false))
+                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; tol=1e-6, alg=DifferentialEquations.Rodas5(autodiff=false))
                 ψ = last(ψ)
             end
         end
@@ -121,8 +121,8 @@ function cond_eval(n, m)
     end
 end
 
-maxn = 1
-max_order = 1
+maxn = 5
+max_order = 5
 data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 

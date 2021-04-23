@@ -55,7 +55,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
         for order1 in orders
             for order2 in range(0, maxn, step=1)
                 H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
-                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; tol=1e-12, alg=DifferentialEquations.Rodas5(autodiff=false))
+                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; alg=DifferentialEquations.Rosenbrock23())
                 ψ = last(ψ)
             end
         end
@@ -69,7 +69,7 @@ function gaussian_spin_profile(ρ, ϕ)
     evolution_time = π/(2*amp)
     step_size = evolution_time/1
     T = [0.0:step_size:evolution_time;];
-    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H; maxiters=1e10)
+    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)
     last(ψ)
 end
 
@@ -121,8 +121,8 @@ function cond_eval(n, m)
     end
 end
 
-maxn = 40
-max_order = 15
+maxn = 1
+max_order = 1
 data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 

@@ -55,7 +55,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
         for order1 in orders
             for order2 in range(0, maxn, step=1)
                 H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
-                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; dt=1e-7, alg=DifferentialEquations.Anas5(1/ω))
+                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; dt=1e-8, alg=DifferentialEquations.Anas5(1/ω))
                 ψ = last(ψ)
             end
         end

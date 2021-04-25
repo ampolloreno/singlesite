@@ -52,7 +52,7 @@ evals = eval(Meta.parse(replace(replace(replace(evals, "}"=> ']'), '{'=>'['), ".
 
 
 lookup = Dict()
-for n in range(0, 30, step=1)
+for n in range(0, 40, step=1)
     for m in range(0, 15, step=1)
         for (i, pair) in enumerate(collect(zip(xs, ys)))
             xx = pair[1]

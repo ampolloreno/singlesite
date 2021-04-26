@@ -91,7 +91,7 @@ function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
         ρ = Int(round(ρ * 10^3, digits=0))
         total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
     end
-    total = .0000001
+    total = .00001
     U * cos(-order1*ω*t + ψ + total)
 end
 

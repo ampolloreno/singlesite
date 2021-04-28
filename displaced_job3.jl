@@ -57,9 +57,9 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
                         else
                             total += amp*data2[order2+1, abs(order1)+1] * Z(order2, order1, ρ, ϕ-ω*t)
                         end
-                        H_odf(ρ, ϕ, t, 0, U, θ, order1, total, ω)*sigmaz(b)
                     end
                 end
+                H_odf(ρ, ϕ, t, 0, U, θ, order1, total, ω)*sigmaz(b)
             end
             _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
             ψ = last(ψ)

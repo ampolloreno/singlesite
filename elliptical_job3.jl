@@ -112,10 +112,10 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
         for order2 in range(0, maxn, step=1)
             if abs(order1) ≤ order2
                 if order1 >= 0
-                    total += amp*data[order2+1, order1+1] * Z(order2, order1, ρ, ϕ-ω*t)
+                    ρ = Int(round(ρ * 10^3, digits=0))
+                    total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
                 else
                     print("BAD")
-                    total += amp*data2[order2+1, abs(order1)+1] * Z(order2, order1, ρ, ϕ-ω*t)
                 end
             end
         end

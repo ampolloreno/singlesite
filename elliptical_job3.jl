@@ -110,13 +110,13 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     total = 0
     # I think julia delays evaluating the function, whereas it immediately looks up the dictioanry entry. Relevant here.
     function look(ρ, order2, order1)
+        ρ = Int(round(ρ * 10^3, digits=0))
         lookup[ρ, order2, order1]
     end
     for order1 in orders
         for order2 in range(0, maxn, step=1)
             if abs(order1) ≤ order2
                 if order1 >= 0
-                    ρ = Int(round(ρ * 10^3, digits=0))
                     total += amp * look(ρ, order2, order1) * cos(order1 * (ϕ-ω*t))
                 else
                     print("BAD")

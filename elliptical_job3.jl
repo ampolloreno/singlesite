@@ -104,29 +104,23 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function look(ρ, order2, order1)
-    ρ = Int(round(ρ * 10^3, digits=0))
-    lookup[ρ, order2, order1]
-end
-
 function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
     """Apply all the zernike coefficients given, in order, for time T each."""
-    orders = range(0, maxm, step=1)
-    total = 0
-    # I think julia delays evaluating the function, whereas it immediately looks up the dictionary entry. Relevant here.
-    for order1 in orders
-        for order2 in range(0, maxn, step=1)
-            if abs(order1) ≤ order2
-                if order1 >= 0
-                    total += amp * look(ρ, order2, order1) * cos(order1 * (ϕ-ω*t))
-                else
-                    print("BAD")
-                    total += amp * look(ρ, order2, order1)^2 * cos(order1 * (ϕ-ω*t))
-                end
-            end
-        end
-     end
     function evaluator(ρ, ϕ)
+        orders = range(0, maxm, step=1)
+        total = 0
+        for order1 in orders
+           for order2 in range(0, maxn, step=1)
+               if abs(order1) ≤ order2
+                   if order1 >= 0
+                       ρ = Int(round(ρ * 10^3, digits=0))
+                       total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
+                   else
+                       print("BAD")
+                   end
+               end
+           end
+        end
         ψ = ψ0
         for order1 in orders
             function H(t, _)

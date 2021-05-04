@@ -107,23 +107,23 @@ end
 function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
     """Apply all the zernike coefficients given, in order, for time T each."""
     function evaluator(ρ, ϕ)
-        orders = range(0, maxm, step=1)
-        total = 0
-        for order1 in orders
-           for order2 in range(0, maxn, step=1)
-               if abs(order1) ≤ order2
-                   if order1 >= 0
-                       ρ = Int(round(ρ * 10^3, digits=0))
-                       total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
-                   else
-                       print("BAD")
-                   end
-               end
-           end
-        end
-        ψ = ψ0
         for order1 in orders
             function H(t, _)
+                orders = range(0, maxm, step=1)
+                total = 0
+                for order1 in orders
+                   for order2 in range(0, maxn, step=1)
+                       if abs(order1) ≤ order2
+                           if order1 >= 0
+                               ρ = Int(round(ρ * 10^3, digits=0))
+                               total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
+                           else
+                               print("BAD")
+                           end
+                       end
+                   end
+                end
+                ψ = ψ0
                 H_odf(ρ, ϕ, t, 0, U, θ, order1, total, ω)*sigmaz(b)
             end
             _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)

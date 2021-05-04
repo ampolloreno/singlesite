@@ -121,6 +121,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
                     total += amp * look(ρ, order2, order1) * cos(order1 * (ϕ-ω*t))
                 else
                     print("BAD")
+                    total += amp * look(ρ, order2, order1)^2 * cos(order1 * (ϕ-ω*t))
                 end
             end
         end

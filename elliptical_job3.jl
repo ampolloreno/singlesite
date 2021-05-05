@@ -85,11 +85,12 @@ function gaussian(σ1, σ2)
     end
 end
 
-function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
-    total = 0
-    if order1 ≤ order2
-        total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
-    end
+function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, total, ω)
+    ρ = Int(round(ρ * 10^3, digits=0))
+    #total = 0
+    #if order1 ≤ order2
+    #    total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
+    #end
     #total = .00001
     U * cos(-order1*ω*t + ψ + total)
 end
@@ -123,73 +124,73 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
                        end
                    end
                 end
-                H_odf(Int(round(ρ * 10^3, digits=0)), ϕ, t, 0, U, θ, mu, total, ω)*sigmaz(b)
-            end
-            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
-            ψ = last(ψ)
-        end
-        ψ
-    end
-end
+			H_odf(ρ, ϕ, t, 0, U, θ, mu, total, ω)*sigmaz(b)
+		    end
+		    _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
+		    ψ = last(ψ)
+		end
+		ψ
+	    end
+	end
 
-function gaussian_spin_profile(ρ, ϕ)
-    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b)
-    evolution_time = π/(2)
-    step_size = evolution_time/1
-    T = [0.0:step_size:evolution_time;];
-    T = [0, evolution_time]
-    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
-    last(ψ)
-end
+	function gaussian_spin_profile(ρ, ϕ)
+	    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
+	    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b)
+	    evolution_time = π/(2)
+	    step_size = evolution_time/1
+	    T = [0.0:step_size:evolution_time;];
+	    T = [0, evolution_time]
+	    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
+	    last(ψ)
+	end
 
-function R(n::Int64, m::Int64, ρ::Float64)
-    if (n - m) % 2 != 0
-        0
-    else
-        function summand(k)
-            n = big(n)
-            k = big(k)
-            (-1)^k * factorial(n-k)/(factorial(k)*factorial(Int((n+m)/2) - k)*factorial(Int((n-m)/2) - k))*(ρ)^(n-2*k)
-        end
-        mapreduce(summand, +, Array(range(0, stop=Int((n-m)/2), step=1)))
-    end
-end
+	function R(n::Int64, m::Int64, ρ::Float64)
+	    if (n - m) % 2 != 0
+		0
+	    else
+		function summand(k)
+		    n = big(n)
+		    k = big(k)
+		    (-1)^k * factorial(n-k)/(factorial(k)*factorial(Int((n+m)/2) - k)*factorial(Int((n-m)/2) - k))*(ρ)^(n-2*k)
+		end
+		mapreduce(summand, +, Array(range(0, stop=Int((n-m)/2), step=1)))
+	    end
+	end
 
-function Z(n, m, ρ, θ)
-    if m < 0
-        R(n, abs(m), ρ) * sin(abs(m) * θ)
-    else
-        R(n, m, ρ) * cos(m * θ)
-    end
-end
+	function Z(n, m, ρ, θ)
+	    if m < 0
+		R(n, abs(m), ρ) * sin(abs(m) * θ)
+	    else
+		R(n, m, ρ) * cos(m * θ)
+	    end
+	end
 
-function integrand(n, m)
-    function rtn(coor)
-        ρ = coor[1]
-        θ = coor[2]
-        x = ρ * cos(θ)
-        y = ρ * sin(θ)
-        Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
-    end
-    rtn
-end
+	function integrand(n, m)
+	    function rtn(coor)
+		ρ = coor[1]
+		θ = coor[2]
+		x = ρ * cos(θ)
+		y = ρ * sin(θ)
+		Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
+	    end
+	    rtn
+	end
 
-function neumann(m)
-    if m == 0
-        2
-    else
-        1
-    end
-end
+	function neumann(m)
+	    if m == 0
+		2
+	    else
+		1
+	    end
+	end
 
-function cond_eval(n, m)
-    if -n ≤ m ≤ n
-        (2*n+2)/(π*neumann(m)) * hcubature(integrand(n, m), [0., 0.], [1., 2*π], maxevals=10000)[1]
-    else
-        0
-    end
-end
+	function cond_eval(n, m)
+	    if -n ≤ m ≤ n
+		(2*n+2)/(π*neumann(m)) * hcubature(integrand(n, m), [0., 0.], [1., 2*π], maxevals=10000)[1]
+	    else
+		0
+	    end
+	end
 
 
 

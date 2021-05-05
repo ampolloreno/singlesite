@@ -126,7 +126,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
                 end
 			H_odf(ρ, ϕ, t, 0, U, θ, mu, total, ω)*sigmaz(b)
 		    end
-		    _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
+		    _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H)#; maxiters=1e10)
 		    ψ = last(ψ)
 		end
 		ψ

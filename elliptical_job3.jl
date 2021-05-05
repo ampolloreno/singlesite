@@ -116,15 +116,14 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
                    for order2 in range(0, maxn, step=1)
                        if abs(order1) ≤ order2
                            if order1 >= 0
-                               ρ = Int(round(ρ * 10^3, digits=0))
-                               total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
+                               total += amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1] * cos(order1 * (ϕ-ω*t))
                            else
                                print("BAD")
                            end
                        end
                    end
                 end
-                H_odf(ρ, ϕ, t, 0, U, θ, mu, total, ω)*sigmaz(b)
+                H_odf(Int(round(ρ * 10^3, digits=0)), ϕ, t, 0, U, θ, mu, total, ω)*sigmaz(b)
             end
             _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
             ψ = last(ψ)

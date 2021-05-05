@@ -88,7 +88,6 @@ end
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
     total = 0
     if order1 ≤ order2
-        ρ = Int(round(ρ * 10^3, digits=0))
         total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
     end
     #total = .00001

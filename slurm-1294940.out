@@ -1,0 +1,9 @@
+1.620321505625415e9
+ERROR: LoadError: syntax: missing comma or ) in argument list
+Stacktrace:
+ [1] top-level scope at /users/smith/anpo0771/repos/singlesite/elliptical_job3.jl:55
+ [2] include(::Function, ::Module, ::String) at ./Base.jl:380
+ [3] include(::Module, ::String) at ./Base.jl:368
+ [4] exec_options(::Base.JLOptions) at ./client.jl:296
+ [5] _start() at ./client.jl:506
+in expression starting at /users/smith/anpo0771/repos/singlesite/elliptical_job3.jl:55

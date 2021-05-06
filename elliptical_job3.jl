@@ -92,7 +92,8 @@ function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, total, ω)
     #    total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
     #end
     #total = .00001
-    U * cos(-order1*ω*t + ψ + total)
+    #U * cos(-order1*ω*t + ψ + total)
+    U * cos(-order*ω*t + ψ + amp*gaussian(σ1, σ2)(ρ, ϕ-ω*t))
 end
 
 function infidelity_across_disk(F1, F2)

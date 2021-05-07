@@ -12,7 +12,7 @@ points_inside_circle = []
 digits = 2
 radius = .5
 function gen_points(pt, points_inside_circle, x, y)
-    pt = [round(pt[1],elliptical_job3.jl digits=digits), round(pt[2], digits=digits)]
+    pt = [round(pt[1], digits=digits), round(pt[2], digits=digits)]
     if pt in points_inside_circle || pt[1]^2 + pt[2]^2 > radius^2
         return
     else

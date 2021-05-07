@@ -86,8 +86,8 @@ function gaussian(σ1, σ2)
 end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, total, ω)
-    U * cos(-order1*ω*t + ψ + gaussian(σ1, σ2)(ρ, ϕ-ω*t)) 
-    #U * cos(-order1*ω*t + ψ + total)
+    U * cos(-order1*ω*t + ψ + amp*gaussian(σ1, σ2)(ρ, ϕ-ω*t)) 
+    U * cos(-order1*ω*t + ψ + total)
 end
 
 function infidelity_across_disk(F1, F2)

@@ -107,15 +107,15 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
         orders = range(0, maxm, step=1)
         for order1 in orders
             function H(t, _)
-                orders = range(0, maxm, step=1)
+                #orders = range(0, maxm, step=1)
                 total = 0
-                for order1 in orders
-                    for order2 in range(0, maxn, step=1)
-                        if abs(order1) ≤ order2
-                            total += amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1] * cos(order1 * (ϕ-ω*t))
-                        end
-                    end
-                end
+                #for order1 in orders
+                #    for order2 in range(0, maxn, step=1)
+                #        if abs(order1) ≤ order2
+                #            total += amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1] * cos(order1 * (ϕ-ω*t))
+                #        end
+                #    end
+                #end
                 H_odf(ρ, ϕ, t, 0, U, θ, order1, total, ω)*sigmaz(b)
             end
             _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H)#; alg=OrdinaryDiffEq.Rodas4P(autodiff=false))
@@ -189,7 +189,7 @@ end
 
 
 maxn = 40
-max_order = 10
+max_order = 100
 #data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 

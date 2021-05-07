@@ -39,8 +39,8 @@ end
 
 
 
-σ1 = 1
-σ2 = .1
+σ1 = .1
+σ2 = 1
 amp= .1  #bringing this up to .1 fixed it, I have no idea why...
 
 
@@ -189,7 +189,7 @@ end
 
 
 maxn = 40
-max_order = 0
+max_order = 5
 #data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 

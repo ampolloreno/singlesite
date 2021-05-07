@@ -3,6 +3,7 @@ using QuantumOptics
 using ArgParse
 using Cubature
 using DelimitedFiles
+using OrdinaryDiffEq
 
 interionic_spacing = .1
 up_modifier = sqrt(3)/2 * interionic_spacing
@@ -38,7 +39,7 @@ end
 
 
 
-σ1 = .1
+σ1 = 1
 σ2 = .1
 amp= .1  #bringing this up to .1 fixed it, I have no idea why...
 
@@ -117,7 +118,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
                 end
                 H_odf(ρ, ϕ, t, 0, U, θ, order1, total, ω)*sigmaz(b)
             end
-            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e10)
+            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H)#; alg=OrdinaryDiffEq.Rodas4P(autodiff=false))
             ψ = last(ψ)
         end
         ψ
@@ -188,7 +189,7 @@ end
 
 
 maxn = 40
-max_order = 15
+max_order = 0
 #data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 

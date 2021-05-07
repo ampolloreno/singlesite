@@ -34,7 +34,7 @@ pairs, xs, ys = gen_points([0, 0], [], [], [])
 
 σ1 = .1
 σ2 = 1
-amp= .01  #bringing this up to .1 fixed it, I have no idea why...
+amp= .1  #bringing this up to .1 fixed it, I have no idea why...
 
 start = time()
 println(start)
@@ -96,7 +96,7 @@ function gaussian_spin_profile(ρ, ϕ)
     last(ψ)
 end
 
-max_order = 10
+max_order = 10 
 
 
 ω = 2*π*180E3

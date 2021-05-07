@@ -86,7 +86,8 @@ function gaussian(σ1, σ2)
 end
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, total, ω)
-    U * cos(-order1*ω*t + ψ + total)
+    U * cos(-order1*ω*t + ψ + gaussian(σ1, σ2)(ρ, ϕ-ω*t)) 
+    #U * cos(-order1*ω*t + ψ + total)
 end
 
 function infidelity_across_disk(F1, F2)
@@ -186,7 +187,7 @@ end
 
 
 
-maxn = 32
+maxn = 40
 max_order = 15
 #data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 

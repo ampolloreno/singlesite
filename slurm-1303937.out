@@ -1,0 +1,16 @@
+ERROR: LoadError: IOError: stat: Unknown system error -116 (Unknown system error -116) for file RawFD(0x00000010)
+Stacktrace:
+ [1] stat(::RawFD) at ./stat.jl:69
+ [2] stat at ./stat.jl:85 [inlined]
+ [3] stat at ./iostream.jl:57 [inlined]
+ [4] filesize at ./stat.jl:311 [inlined]
+ [5] isvalid_file_crc(::IOStream) at ./loading.jl:1312
+ [6] _require_from_serialized(::String) at ./loading.jl:736
+ [7] _require(::Base.PkgId) at ./loading.jl:1040
+ [8] require(::Base.PkgId) at ./loading.jl:928
+ [9] require(::Module, ::Symbol) at ./loading.jl:923
+ [10] include(::Function, ::Module, ::String) at ./Base.jl:380
+ [11] include(::Module, ::String) at ./Base.jl:368
+ [12] exec_options(::Base.JLOptions) at ./client.jl:296
+ [13] _start() at ./client.jl:506
+in expression starting at /users/smith/anpo0771/repos/singlesite/mwe.jl:2

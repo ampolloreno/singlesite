@@ -34,7 +34,7 @@ pairs, xs, ys = gen_points([0, 0], [], [], [])
 
 σ1 = .1
 σ2 = 1
-amp= 1  #bringing this up to .1 fixed it, I have no idea why...
+amp= .1  #bringing this up to .1 fixed it, I have no idea why...
 
 start = time()
 println(start)
@@ -78,7 +78,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
                 total = 0
                 H_odf(ρ, ϕ, t, 0, U, θ, order1, ω)*sigmaz(b)
             end
-            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H)#; alg=OrdinaryDiffEq.Rodas4P(autodiff=false))
+            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; alg=OrdinaryDiffEq.Kvaerno5(autodiff=false))
             ψ = last(ψ)
         end
         ψ
@@ -103,7 +103,7 @@ max_order = 40
 θ = -π/2;
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-U = BigFloat(2 * π * 10E3)
+U = 2 * π * 10E3
 evolution_time = π/(2*U*amp)
 T = [0, evolution_time]
 sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_order, U, θ, ω, b)

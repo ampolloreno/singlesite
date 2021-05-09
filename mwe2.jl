@@ -106,7 +106,7 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function timeevolve(evolution_time, ψ, H; step=.00001) # Assume H is proportional to Z
+function timeevolve(evolution_time, ψ, H; step=.0001) # Assume H is proportional to Z
     T = [0.0:step:evolution_time;]
     a = 1
     b = 1
@@ -116,7 +116,6 @@ function timeevolve(evolution_time, ψ, H; step=.00001) # Assume H is proportion
         a *= c - 1.0im*d
         b *= c + 1.0im*d
     end
-    print(ψ)
     [ψ[1] * a,  ψ[2] * b]
 end
 

@@ -93,7 +93,7 @@ function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, ω)
             total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
         end
     end
-    total = amp * 1
+    #total = amp * 1
     U * cos(-order1*ω*t + ψ + total)  
 end
 
@@ -106,7 +106,7 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function timeevolve(evolution_time, ψ, H; step=10E-6) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
+function timeevolve(evolution_time, ψ, H; step=10E-9) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
     T = [0.0:step:evolution_time;]
     a = 1
     b = 1
@@ -197,7 +197,7 @@ end
 
 
 maxn = 32
-max_order = 1 
+max_order = 15 
 #data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 

@@ -93,7 +93,7 @@ function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, ω)
             total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
         end
     end
-    #total = .00001
+    total = amp * 1
     U * cos(-order1*ω*t + ψ + total)
 end
 
@@ -106,7 +106,7 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function timeevolve(evolution_time, ψ, H; step=10E-9) # Assume H is proportional to Z
+function timeevolve(evolution_time, ψ, H; step=10E-6) # Assume H is proportional to Z
     T = [0.0:step:evolution_time;]
     a = 1
     b = 1

@@ -95,7 +95,7 @@ function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, ω)
     end
     total = amp * 1
     U * cos(-order1*ω*t + ψ + total)
-    U * amp / 2
+    U * amp  
 end
 
 function infidelity_across_disk(F1, F2)
@@ -114,8 +114,8 @@ function timeevolve(evolution_time, ψ, H; step=10E-3) # Assume H is proportiona
     for t in T
         print(H(BigFloat(t)))
         print("\n")
-	c = cos(BigFloat(H(BigFloat(t))/2 * step))
-        d = sin(BigFloat(H(BigFloat(t))/2 * step))
+	c = cos(BigFloat(H(BigFloat(t)) * step))
+        d = sin(BigFloat(H(BigFloat(t)) * step))
         a *= c - 1.0im*d
         b *= c + 1.0im*d
     end

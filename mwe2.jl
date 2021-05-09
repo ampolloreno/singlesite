@@ -107,12 +107,13 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function timeevolve(evolution_time, ψ, H; step=10E-6) # Assume H is proportional to Z
+function timeevolve(evolution_time, ψ, H; step=10E-3) # Assume H is proportional to Z
     T = [0.0:step:evolution_time;]
     a = 1
     b = 1
     for t in T
-        c = cos(BigFloat(H(BigFloat(t))/2 * step))
+        print(H(BigFloat(t)))
+	c = cos(BigFloat(H(BigFloat(t))/2 * step))
         d = sin(BigFloat(H(BigFloat(t))/2 * step))
         a *= c - 1.0im*d
         b *= c + 1.0im*d

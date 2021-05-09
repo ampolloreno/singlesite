@@ -111,13 +111,11 @@ function timeevolve(evolution_time, ψ, H; step=10E-9) # Assume H is proportiona
     a = 1
     b = 1
     for t in T
-        c = cos(BigFloat(H(t)/2 * step))
-        d = sin(BigFloat(H(t)/2 * step))
+        c = cos(BigFloat(H(BigFloat(t))/2 * step))
+        d = sin(BigFloat(H(BigFloat(t))/2 * step))
         a *= c - 1.0im*d
         b *= c + 1.0im*d
     end
-    print(a)
-    print("\n")
     [ψ[1] * a,  ψ[2] * b]
 end
 

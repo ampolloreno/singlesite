@@ -10,7 +10,7 @@ SLURM = f"""#!/bin/bash
 #SBATCH -q standard
 #SBATCH -n {num_processors}
 #SBATCH -N 1
-#SBATCH --mem=8G
+#SBATCH --mem=32G
 #SBATCH -t 01-00:0:00
 #SBATCH --tmp=1GB
 

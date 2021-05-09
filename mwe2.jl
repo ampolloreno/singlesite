@@ -106,14 +106,28 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
+function timeevolve(evolution_time, ψ, H; step=.001) # Assume H is proportional to Z
+    T = [0.0:step:evolution_time;]
+    a = 1
+    b = 1
+    for t in T
+        c = cos(H(t) * step)
+        d = sin(H(t) * step)
+        a *= c - 1.0im*d
+        b *= c + 1.0im*d
+    end
+    [ψ[1] * a,  ψ[2] * b]
+end
+
+
+function sequential_exact_evolution_evaluator_factory(ψ0, evolution_time, maxm, U, θ, ω, b)
     """Apply all the zernike coefficients given, in order, for time T each."""
     orders = range(0, maxm, step=1)
     function evaluator(ρ, ϕ)
-        ψ = ψ0
+        ψ = ψ0.data
         for order1 in orders
-            H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, ω)*sigmaz(b)
-            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H;)# dtmin=1e-3)#; dtmin=1e-5, dt=1.1e-4)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
+            H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, ω)*sigmaz(b)
+            ψ = timeevolve(evolution_time, ψ, H;)
             ψ = last(ψ)
         end
         ψ
@@ -195,11 +209,8 @@ b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = BigFloat(2 * π * 10E3)
 evolution_time = π/(2*U*amp)
-#step_size = evolution_time/1
-#T = [0.0:step_size:evolution_time;];
-#evolution_time = round(evolution_time, sigdigits=3)
 T = [0, evolution_time]
-sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_order, U, θ, ω, b)
+sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, evolution_time, max_order, U, θ, ω, b)
 x = parse(Float64, ARGS[1])
 y = parse(Float64, ARGS[2])
 ρ = sqrt(x^2 + y^2)

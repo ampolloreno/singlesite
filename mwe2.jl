@@ -111,8 +111,8 @@ function timeevolve(evolution_time, ψ, H; step=.001) # Assume H is proportional
     a = 1
     b = 1
     for t in T
-        c = cos(H(t) * step)
-        d = sin(H(t) * step)
+        c = cos(H(t)/2 * step)
+        d = sin(H(t)/2 * step)
         a *= c - 1.0im*d
         b *= c + 1.0im*d
     end

@@ -99,7 +99,7 @@ end
 
 function infidelity_across_disk(F1, F2)
     function infidelity_polar(ρ, ϕ)
-        ψ1 = F1(ρ, ϕ).data
+        ψ1 = F1(ρ, ϕ)
         ψ2 = F2(ρ, ϕ).data
         infid = 1 - real(fidelity(ψ1, ψ2))
         return infid, ψ1, ψ2
@@ -116,6 +116,7 @@ function timeevolve(evolution_time, ψ, H; step=.001) # Assume H is proportional
         a *= c - 1.0im*d
         b *= c + 1.0im*d
     end
+    print(ψ)
     [ψ[1] * a,  ψ[2] * b]
 end
 
@@ -126,9 +127,8 @@ function sequential_exact_evolution_evaluator_factory(ψ0, evolution_time, maxm,
     function evaluator(ρ, ϕ)
         ψ = ψ0.data
         for order1 in orders
-            H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, ω)*sigmaz(b)
-            ψ = timeevolve(evolution_time, ψ, H;)
-            ψ = last(ψ)
+            H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, ω)
+            ψ = timeevolve(evolution_time, ψ, H)
         end
         ψ
     end

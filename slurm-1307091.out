@@ -1,0 +1,15 @@
+1.620532976607052e9
+ERROR: LoadError: BoundsError
+Stacktrace:
+ [1] getindex at ./number.jl:78 [inlined]
+ [2] timeevolve(::BigFloat, ::Complex{BigFloat}, ::var"#H#5"{Float64,Float64,Int64,BigFloat,Float64,Float64}; step::Float64) at /users/smith/anpo0771/repos/singlesite/mwe2.jl:120
+ [3] timeevolve(::BigFloat, ::Complex{BigFloat}, ::Function) at /users/smith/anpo0771/repos/singlesite/mwe2.jl:110
+ [4] (::var"#evaluator#4"{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},BigFloat,BigFloat,Float64,Float64,StepRange{Int64,Int64}})(::Float64, ::Float64) at /users/smith/anpo0771/repos/singlesite/mwe2.jl:131
+ [5] (::var"#infidelity_polar#2"{var"#evaluator#4"{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},BigFloat,BigFloat,Float64,Float64,StepRange{Int64,Int64}},typeof(gaussian_spin_profile)})(::Float64, ::Float64) at /users/smith/anpo0771/repos/singlesite/mwe2.jl:102
+ [6] top-level scope at /users/smith/anpo0771/repos/singlesite/mwe2.jl:219
+ [7] include(::Function, ::Module, ::String) at ./Base.jl:380
+ [8] include(::Module, ::String) at ./Base.jl:368
+ [9] exec_options(::Base.JLOptions) at ./client.jl:296
+ [10] _start() at ./client.jl:506
+in expression starting at /users/smith/anpo0771/repos/singlesite/mwe2.jl:219
+Complex{Float64}[0.7071067811865475 + 0.0im, 0.7071067811865475 + 0.0im]0.452360575122948558175072560062840498098383343284517819876332328419924649832664 + 0.5434794477019670385971128445765317299591142283287485300851063890706509499938723im

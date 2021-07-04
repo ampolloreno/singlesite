@@ -71,8 +71,8 @@ println(start)
 flush(stdout)
 
 function fidelity(ρ, σ)
-    #ρ = ρ/norm(ρ)
-    #σ = σ/norm(σ)
+    ρ = ρ/norm(ρ)
+    σ = σ/norm(σ)
     f = abs(conj(transpose(ρ))*σ)^2
     f
 end

@@ -138,13 +138,13 @@ end
 
 function gaussian_spin_profile(ρ, ϕ)
     ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b)
+    H(t) = gaussian(σ1, σ2)(ρ, ϕ)
     evolution_time = π/(2)
     step_size = evolution_time/1
     T = [0.0:step_size:evolution_time;];
     T = [0, evolution_time]
-    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
-    last(ψ)
+    ψ = timeevolve(evolution_time, ψ0.data, H)
+    ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
 end
 
 function R(n::Int64, m::Int64, ρ::Float64)

@@ -1,0 +1,36 @@
+1.625412154714641e9
+Any[0.0010092541647950507, -1.445671658637873e-7, -0.0019270273637855197, 0.0, 0.0016595421404975172, 0.0, -0.001287369503525124, 0.0, 0.0009200176880733015, 0.0, -0.0005854973222832791, 0.0, 0.0003539783118176289, 0.0, -0.00019585653865537405, 0.0, 9.359967254049074e-5, 0.0, -3.44048708160534e-5, 0.0, 9.845015798722724e-6, 0.0, -1.847879053802053e-6, 0.0, 2.693979966453126e-7, 0.0, -2.970128727035634e-8, 0.0, 1.7074455801646787e-9, 0.0, -3.22232580872328e-11]1.625412470393628e9
+315.678986787796
+[ Info: Defining absense of feature x86_64_prfchw.
+[ Info: Defining absense of feature x86_64_bmi2.
+[ Info: Defining absense of feature x86_64_fsgsbase.
+[ Info: Defining absense of feature x86_64_xsavec.
+[ Info: Defining absense of feature x86_64_mpx.
+[ Info: Defining absense of feature x86_64_aes.
+[ Info: Defining absense of feature x86_64_xsaves.
+[ Info: Defining absense of feature x86_64_avx512vnni.
+[ Info: Defining absense of feature x86_64_clwb.
+[ Info: Defining absense of feature x86_64_avx512f.
+[ Info: Defining absense of feature x86_64_pku.
+[ Info: Defining absense of feature x86_64_rdseed.
+[ Info: Defining absense of feature x86_64_avx512bw.
+[ Info: Defining absense of feature x86_64_clflushopt.
+[ Info: Defining absense of feature x86_64_xsave.
+[ Info: Defining absense of feature x86_64_avx512vl.
+[ Info: Defining absense of feature x86_64_invpcid.
+[ Info: Defining absense of feature x86_64_avx512cd.
+[ Info: Defining absense of feature x86_64_avx.
+[ Info: Defining absense of feature x86_64_fma.
+[ Info: Defining absense of feature x86_64_bmi.
+[ Info: Defining absense of feature x86_64_rdrnd.
+[ Info: Defining absense of feature x86_64_avx2.
+[ Info: Defining absense of feature x86_64_lzcnt.
+[ Info: Defining absense of feature x86_64_pclmul.
+[ Info: Defining absense of feature x86_64_f16c.
+[ Info: Defining absense of feature x86_64_movbe.
+[ Info: Defining absense of feature x86_64_xsaveopt.
+[ Info: Defining absense of feature x86_64_avx512dq.
+[ Info: Defining absense of feature x86_64_adx.
+[ Info: Defining CPU name.
+[ Info: Redefining cache 2.
+[ Info: Redefining cache 3.

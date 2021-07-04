@@ -129,7 +129,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, evolution_time, maxm,
         end
         print(totals)
         for order1 in orders
-            H(t) = U * cos(-order1*ω*t + θ + sum([total * cos((j) * (ϕ-ω*t)) for (j, total) in enumerate(totals)]))
+            H(t) = U * cos(-order1*ω*t + θ + sum([total * cos((j-1) * (ϕ-ω*t)) for (j, total) in enumerate(totals)]))
             ψ = timeevolve(evolution_time, ψ, H)
         end
         ψ

@@ -1,0 +1,28 @@
+1.62538169279223e9
+Any[0.010305034031839142, -1.0725678098922828e-6, -0.019636941232365562, 0.0, 0.0168075902109057, 0.0, -0.012971812590435701, 0.0, 0.009171300105924257, 0.0, -0.005760277980336744, 0.0, 0.0034644309046310525, 0.0, -0.001877642040131709, 0.0, 0.0008650663355919326, 0.0, -0.0003046758612084012, 0.0, 8.3576147254897e-5, 0.0, -1.5002435415949369e-5, 0.0, 2.0992392856555834e-6, 0.0, -2.224794077444176e-7, 0.0, 1.2343852626844328e-8, 0.0, -2.2306581975248386e-10]1.625381714799196e9
+22.00696611404419
+[ Info: Defining absense of feature x86_64_prfchw.
+[ Info: Defining absense of feature x86_64_bmi2.
+[ Info: Defining absense of feature x86_64_xsavec.
+[ Info: Defining absense of feature x86_64_mpx.
+[ Info: Defining absense of feature x86_64_xsaves.
+[ Info: Defining absense of feature x86_64_avx512vnni.
+[ Info: Defining absense of feature x86_64_clwb.
+[ Info: Defining absense of feature x86_64_avx512f.
+[ Info: Defining absense of feature x86_64_pku.
+[ Info: Defining absense of feature x86_64_rdseed.
+[ Info: Defining absense of feature x86_64_avx512bw.
+[ Info: Defining absense of feature x86_64_clflushopt.
+[ Info: Defining absense of feature x86_64_avx512vl.
+[ Info: Defining absense of feature x86_64_invpcid.
+[ Info: Defining absense of feature x86_64_avx512cd.
+[ Info: Defining absense of feature x86_64_fma.
+[ Info: Defining absense of feature x86_64_bmi.
+[ Info: Defining absense of feature x86_64_avx2.
+[ Info: Defining absense of feature x86_64_lzcnt.
+[ Info: Defining absense of feature x86_64_movbe.
+[ Info: Defining absense of feature x86_64_avx512dq.
+[ Info: Defining absense of feature x86_64_adx.
+[ Info: Defining CPU name.
+[ Info: Redefining cache 2.
+[ Info: Redefining cache 3.

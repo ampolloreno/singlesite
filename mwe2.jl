@@ -92,13 +92,13 @@ end
 function infidelity_across_disk(F1, F2)
     function infidelity_polar(ρ, ϕ)
         ψ1 = F1(ρ, ϕ)
-        ψ2 = F2(ρ, ϕ).data
+        ψ2 = F2(ρ, ϕ)
         infid = 1 - real(fidelity(ψ1, ψ2))
         return infid, ψ1, ψ2
     end
 end
 
-function timeevolve(evolution_time, ψ, H; step=10E-11) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
+function timeevolve(evolution_time, ψ, H; step=10E-6) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
     T = [0.0:step:evolution_time;]
     a = 1
     b = 1
@@ -144,7 +144,7 @@ function gaussian_spin_profile(ρ, ϕ)
     T = [0.0:step_size:evolution_time;];
     T = [0, evolution_time]
     ψ = timeevolve(evolution_time, ψ0.data, H)
-    ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
+    #ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
 end
 
 function R(n::Int64, m::Int64, ρ::Float64)

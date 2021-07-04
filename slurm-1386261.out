@@ -1,0 +1,12 @@
+1.62538053906805e9
+ERROR: LoadError: type Array has no field data
+Stacktrace:
+ [1] getproperty(::Array{Complex{Float64},1}, ::Symbol) at ./Base.jl:33
+ [2] (::var"#infidelity_polar#2"{var"#evaluator#5"{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},Float64,Float64,Float64,Float64,StepRange{Int64,Int64}},typeof(gaussian_spin_profile)})(::Float64, ::Float64) at /users/smith/anpo0771/repos/singlesite/mwe2.jl:95
+ [3] top-level scope at /users/smith/anpo0771/repos/singlesite/mwe2.jl:220
+ [4] include(::Function, ::Module, ::String) at ./Base.jl:380
+ [5] include(::Module, ::String) at ./Base.jl:368
+ [6] exec_options(::Base.JLOptions) at ./client.jl:296
+ [7] _start() at ./client.jl:506
+in expression starting at /users/smith/anpo0771/repos/singlesite/mwe2.jl:220
+Any[0.001235948227541273, 3.2544343186264163e-9, -0.002299350409744837, 0.0, 0.001872792609354022, 0.0, -0.0013548853324031574, 0.0, 0.0008496699931776299, 0.0, -0.0004844524899897134, 0.0, 0.00025551609086679007, 0.0, -0.00010829179586599915, 0.0, 3.464162190384701e-5, 0.0, -8.329312486044327e-6, 0.0, 1.58032865226369e-6]

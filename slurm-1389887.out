@@ -1,0 +1,20 @@
+1.626058292560727e9
+ERROR: LoadError: MethodError: Cannot `convert` an object of type Array{BigFloat,1} to an object of type Complex{Float64}
+Closest candidates are:
+  convert(::Type{T}, !Matched::ArrayInterface.StaticInt{N}) where {T<:Number, N} at /users/smith/anpo0771/.julia/packages/ArrayInterface/UHmDX/src/static.jl:22
+  convert(::Type{T}, !Matched::VectorizationBase.LazyMulAdd{M,O,I}) where {M, O, I, T<:Number} at /users/smith/anpo0771/.julia/packages/VectorizationBase/3ho1W/src/lazymul.jl:20
+  convert(::Type{T}, !Matched::T) where T<:Number at number.jl:6
+  ...
+Stacktrace:
+ [1] setindex!(::Array{Complex{Float64},1}, ::Array{BigFloat,1}, ::Int64) at ./array.jl:847
+ [2] timeevolve(::Float64, ::Array{Complex{Float64},1}, ::var"#H#6"{Float64,Array{Any,1},Int64,Float64,Float64,Float64}; step::Float64) at /users/smith/anpo0771/repos/singlesite/mwe2.jl:102
+ [3] timeevolve(::Float64, ::Array{Complex{Float64},1}, ::Function) at /users/smith/anpo0771/repos/singlesite/mwe2.jl:102
+ [4] (::var"#evaluator#5"{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},Float64,Float64,Float64,Float64,StepRange{Int64,Int64}})(::Float64, ::Float64) at /users/smith/anpo0771/repos/singlesite/mwe2.jl:135
+ [5] (::var"#infidelity_polar#2"{var"#evaluator#5"{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},Float64,Float64,Float64,Float64,StepRange{Int64,Int64}},typeof(gaussian_spin_profile)})(::Float64, ::Float64) at /users/smith/anpo0771/repos/singlesite/mwe2.jl:94
+ [6] top-level scope at /users/smith/anpo0771/repos/singlesite/mwe2.jl:222
+ [7] include(::Function, ::Module, ::String) at ./Base.jl:380
+ [8] include(::Module, ::String) at ./Base.jl:368
+ [9] exec_options(::Base.JLOptions) at ./client.jl:296
+ [10] _start() at ./client.jl:506
+in expression starting at /users/smith/anpo0771/repos/singlesite/mwe2.jl:222
+Any[0.001462276634032883, -1.0969484664535845e-7, -0.0026721169739956988, 0.0, 0.00205735295930145, 0.0, -0.0013201907487871342, 0.0, 0.0007360879557122141, 0.0, -0.00036292382970414216, 0.0, 0.00014022839431974033, 0.0, -4.354489720650349e-5, 0.0, 9.415986418610394e-6, 0.0, -1.5482675763250775e-6, 0.0, 2.042439458184179e-7, 0.0, -1.7269178067023697e-8, 0.0, 1.1932004639845823e-9, 0.0, -6.370018026494409e-11, 0.0, 1.8773052199854335e-12, 0.0, -1.6254424364992958e-14]

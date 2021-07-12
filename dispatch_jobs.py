@@ -34,7 +34,7 @@ SLURM = f"""#!/bin/bash
 # Replace this with commands to run your job. 
 """
 
-cmd = f"~/julia-1.5.3/bin/julia ~/repos/singlesite/elliptical_job.jl"
+cmd = f"~/julia-1.5.3/bin/julia ~/repos/singlesite/mwe3.jl"
 print("Dispatching...")
 interionic_spacing = .1
 up_modifier = np.sqrt(3)/2 * interionic_spacing

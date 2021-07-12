@@ -145,7 +145,7 @@ end
 
 
 maxn = 32
-max_order = 15
+max_order = 40
 #data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
 
 

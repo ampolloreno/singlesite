@@ -146,6 +146,33 @@ function gaussian_spin_profile(ρ, ϕ)
     ψ = timeevolve(evolution_time, ψ, H)
 end
 
+
+function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
+    """Apply all the zernike coefficients given, in order, for time T each."""
+    orders = range(0, maxm, step=1)
+    function evaluator(ρ, ϕ)
+        ψ = ψ0
+        for order1 in orders
+            for order2 in range(0, maxn, step=1)
+                H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
+                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H;)# dtmin=1e-3)#; dtmin=1e-5, dt=1.1e-4)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
+                ψ = last(ψ)
+            end
+        end
+        ψ
+    end
+end
+
+function gaussian_spin_profile(ρ, ϕ)
+    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
+    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b)
+    evolution_time = π/(2)
+    step_size = evolution_time/1
+    T = [0.0:step_size:evolution_time;];
+    T = [0, evolution_time]
+    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
+    last(ψ)
+end
 function R(n::Int64, m::Int64, ρ::Float64)
     if (n - m) % 2 != 0
         0

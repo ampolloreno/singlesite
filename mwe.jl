@@ -34,7 +34,7 @@ pairs, xs, ys = gen_points([0, 0], [], [], [])
 
 σ1 = .1
 σ2 = 1
-amp= .01  #bringing this up to .1 fixed it, I have no idea why...
+amp= .1  #bringing this up to .1 fixed it, I have no idea why...
 
 start = time()
 println(start)
@@ -78,7 +78,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
                 total = 0
                 H_odf(ρ, ϕ, t, 0, U, θ, order1, ω)*sigmaz(b)
             end
-            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H; maxiters=1e9,  alg=OrdinaryDiffEq.Rodas4P(autodiff=false))
+            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H)#; maxiters=1e9,  alg=OrdinaryDiffEq.Rodas4P(autodiff=false))
             ψ = last(ψ)
         end
         ψ

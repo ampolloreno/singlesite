@@ -36,7 +36,7 @@ end
 
 σ1 = .1
 σ2 = 1
-amp= .01  #bringing this up to .1 fixed it, I have no idea why...
+amp= .05  #bringing this up to .1 fixed it, I have no idea why...
 
 start = time()
 println(start)

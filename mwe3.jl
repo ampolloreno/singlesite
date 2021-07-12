@@ -97,8 +97,8 @@ end
 
 function infidelity_across_disk(F1, F2)
     function infidelity_polar(ρ, ϕ)
-        ψ1 = F1(ρ, ϕ)
-        ψ2 = F2(ρ, ϕ)
+        ψ1 = F1(ρ, ϕ).data
+        ψ2 = F2(ρ, ϕ).data
         infid = 1 - real(fidelity(ψ1, ψ2))
         return infid, ψ1, ψ2
     end

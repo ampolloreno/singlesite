@@ -1,0 +1,19 @@
+1.626059705495551e9
+Any[0.013489493885568372, -8.126873453046251e-7, -0.024838900710011887, 0.0, 0.019749592470031097, 0.0, -0.013486417040397098, 0.0, 0.00795450661875215, 0.0, -0.004266960112197507, 0.0, 0.0019506605208207076, 0.0, -0.0007068181903834039, 0.0, 0.00018467875948815067, 0.0, -3.643851555552165e-5, 0.0, 5.7231357736298126e-6, 0.0, -5.778028943984932e-7, 0.0, 4.724825966413171e-8, 0.0, -2.97409705186146e-9, 0.0, 1.0230196793582166e-10, 0.0, -1.0542720579230306e-12]1.626060423368629e9
+717.8730778694153
+[ Info: Defining absense of feature x86_64_xsavec.
+[ Info: Defining absense of feature x86_64_mpx.
+[ Info: Defining absense of feature x86_64_xsaves.
+[ Info: Defining absense of feature x86_64_avx512vnni.
+[ Info: Defining absense of feature x86_64_clwb.
+[ Info: Defining absense of feature x86_64_avx512f.
+[ Info: Defining absense of feature x86_64_pku.
+[ Info: Defining absense of feature x86_64_avx512bw.
+[ Info: Defining absense of feature x86_64_clflushopt.
+[ Info: Defining absense of feature x86_64_avx512vl.
+[ Info: Defining absense of feature x86_64_avx512cd.
+[ Info: Defining presence of feature x86_64_rtm.
+[ Info: Defining absense of feature x86_64_avx512dq.
+[ Info: Defining CPU name.
+[ Info: Redefining cache 2.
+[ Info: Redefining cache 3.

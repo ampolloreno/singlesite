@@ -96,7 +96,7 @@ function gaussian_spin_profile(ρ, ϕ)
     last(ψ)
 end
 
-max_order = 40 
+max_order = 32 
 
 
 ω = 2*π*180E3

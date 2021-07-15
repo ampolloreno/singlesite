@@ -88,7 +88,7 @@ end
 lookup2 = Dict()
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
-    U * cos(-order1*ω*t + ψ + amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1]) * cos(order1 * (ϕ-ω*t))
+    U * cos(-order1*ω*t + ψ + amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1] * cos(order1 * (ϕ-ω*t)))
     #U * cos(-order1*ω*t + ψ + amp * gaussian(σ1, σ2)(ρ, (ϕ-ω*t)))
 end
 

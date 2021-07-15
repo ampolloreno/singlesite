@@ -85,15 +85,12 @@ function gaussian(σ1, σ2)
     end
 end
 
+lookup2 = Dict()
+
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
-    total = 0
-    if order1 ≤ order2
-        ρ = Int(round(ρ * 10^3, digits=0))
-        total += amp * lookup[ρ, order2, order1] * cos(order1 * (ϕ-ω*t))
-    end
-    #total = .00001
-    U * cos(-order1*ω*t + ψ + total)
+    U * cos(-order1*ω*t + ψ + amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1]) * cos(order1 * (ϕ-ω*t))
 end
+
 
 function infidelity_across_disk(F1, F2)
     function infidelity_polar(ρ, ϕ)
@@ -105,20 +102,15 @@ function infidelity_across_disk(F1, F2)
 end
 
 function timeevolve(evolution_time, ψ, H; step=10E-8) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
-    ψ[1] = ψ[1]
-    ψ[2] = ψ[2]
-    T = [0.0:step:evolution_time;]
-    a = BigFloat(1)
-    b = BigFloat(1)
-    for t in T
-        t = BigFloat(t)
-	step = BigFloat(step)
-        c = cos(H(t) * step)
-        d = sin(H(t) * step)
-        a *= c - 1.0im*d
-        b *= c + 1.0im*d
+    num_steps = evolution_time/step
+    i = 0
+    while i < num_steps
+        t = i*step
+        i+=1
+        h = H(t) * step
+        ψ[1]  *= cos(h) - 1.0im*sin(h)
+        ψ[2]  *= cos(h) + 1.0im*sin(h)
     end
-    [ψ[1] * a,  ψ[2] * b]
 end
 
 
@@ -129,8 +121,10 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
         ψ = ψ0.data
         for order1 in orders
             for order2 in range(0, maxn, step=1)
-                H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
-                ψ = timeevolve(evolution_time, ψ, H)
+                if order1 ≤ order2
+                    H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
+                    timeevolve(evolution_time, ψ, H)
+                end
             end
         end
         ψ
@@ -145,36 +139,11 @@ function gaussian_spin_profile(ρ, ϕ)
     step_size = evolution_time/1
     T = [0.0:step_size:evolution_time;];
     T = [0, evolution_time]
-    ψ = timeevolve(evolution_time, ψ, H)
+    timeevolve(evolution_time, ψ, H)
+    ψ
 end
 
 
-#function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
-#    """Apply all the zernike coefficients given, in order, for time T each."""
-#    orders = range(0, maxm, step=1)
-#    function evaluator(ρ, ϕ)
-#        ψ = ψ0
-#        for order1 in orders
-#            for order2 in range(0, maxn, step=1)
-#                H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
-#                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H;)# dtmin=1e-3)#; dtmin=1e-5, dt=1.1e-4)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
-#                ψ = last(ψ)
-#            end
-#        end
-#        ψ
-#    end
-#end
-
-#function gaussian_spin_profile(ρ, ϕ)
-#    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-#    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b)
-#    evolution_time = π/(2)
-#    step_size = evolution_time/1
-#    T = [0.0:step_size:evolution_time;];
-#    T = [0, evolution_time]
-#    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
-#    last(ψ)
-#end
 function R(n::Int64, m::Int64, ρ::Float64)
     if (n - m) % 2 != 0
         0
@@ -188,6 +157,7 @@ function R(n::Int64, m::Int64, ρ::Float64)
     end
 end
 
+
 function Z(n, m, ρ, θ)
     if m < 0
         R(n, abs(m), ρ) * sin(abs(m) * θ)
@@ -195,6 +165,7 @@ function Z(n, m, ρ, θ)
         R(n, m, ρ) * cos(m * θ)
     end
 end
+
 
 function integrand(n, m)
     function rtn(coor)
@@ -224,9 +195,6 @@ function cond_eval(n, m)
 end
 
 
-
-
-
 maxn = 32
 max_order = 15
 #data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
@@ -237,7 +205,7 @@ max_order = 15
 # From numerical experiments it seems like 40 is sufficient to match the pattern for .1, 1., to an accuracy of .003.
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-U = BigFloat(2 * π * 10E3)
+U = 2 * π * 10E3
 evolution_time = π/(2*U*amp)
 #step_size = evolution_time/1
 #T = [0.0:step_size:evolution_time;];

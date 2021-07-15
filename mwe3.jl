@@ -88,7 +88,8 @@ end
 lookup2 = Dict()
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
-    U * cos(-order1*ω*t + ψ + amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1]) * cos(order1 * (ϕ-ω*t))
+    #U * cos(-order1*ω*t + ψ + amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1]) * cos(order1 * (ϕ-ω*t))
+    U * cos(-order1*ω*t + ψ + amp * gaussian(σ1, σ2)(ρ, (ϕ-ω*t)))
 end
 
 
@@ -122,8 +123,8 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
         for order1 in orders
             for order2 in range(0, maxn, step=1)
                 if order1 ≤ order2
-                    H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
-                    timeevolve(evolution_time, ψ, H)
+                    H(t) = @fastmath(H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω))
+                    @fastmath(timeevolve(evolution_time, ψ, H))
                 end
             end
         end
@@ -166,50 +167,15 @@ function Z(n, m, ρ, θ)
     end
 end
 
-
-function integrand(n, m)
-    function rtn(coor)
-        ρ = coor[1]
-        θ = coor[2]
-        x = ρ * cos(θ)
-        y = ρ * sin(θ)
-        Z(n, m, ρ, θ) * exp(-x^2/σ1^2 - y^2/σ2^2) * ρ
-    end
-    rtn
-end
-
-function neumann(m)
-    if m == 0
-        2
-    else
-        1
-    end
-end
-
-function cond_eval(n, m)
-    if -n ≤ m ≤ n
-        (2*n+2)/(π*neumann(m)) * hcubature(integrand(n, m), [0., 0.], [1., 2*π], maxevals=10000)[1]
-    else
-        0
-    end
-end
-
-
 maxn = 32
 max_order = 15
-#data = hcat([[c[1] for c in [cond_eval(n, m) for n in range(0, maxn, step=1)]] for m in range(0, max_order, step=1)]...)
-
 
 ω = 2*π*180E3
 θ = -π/2;
-# From numerical experiments it seems like 40 is sufficient to match the pattern for .1, 1., to an accuracy of .003.
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = 2 * π * 10E3
 evolution_time = π/(2*U*amp)
-#step_size = evolution_time/1
-#T = [0.0:step_size:evolution_time;];
-#evolution_time = round(evolution_time, sigdigits=3)
 T = [0, evolution_time]
 sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_order, U, θ, ω, b)
 x = parse(Float64, ARGS[1])

@@ -123,8 +123,8 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
         for order1 in orders
             for order2 in range(0, maxn, step=1)
                 if order1 ≤ order2
-                    H(t) = @fastmath(H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω))
-                    @fastmath(timeevolve(evolution_time, ψ, H))
+                    H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
+                    timeevolve(evolution_time, ψ, H)
                 end
             end
         end

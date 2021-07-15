@@ -97,8 +97,8 @@ end
 
 function infidelity_across_disk(F1, F2)
     function infidelity_polar(ρ, ϕ)
-        ψ1 = F1(ρ, ϕ).data
-        ψ2 = F2(ρ, ϕ).data
+        ψ1 = F1(ρ, ϕ)
+        ψ2 = F2(ρ, ϕ)
         infid = 1 - real(fidelity(ψ1, ψ2))
         return infid, ψ1, ψ2
     end
@@ -137,16 +137,16 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     end
 end
 
-#function gaussian_spin_profile(ρ, ϕ)
-#    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-#    ψ = ψ0.data
-#    H(t) = gaussian(σ1, σ2)(ρ, ϕ)
-#    evolution_time = π/(2)
-#    step_size = evolution_time/1
-#    T = [0.0:step_size:evolution_time;];
-#    T = [0, evolution_time]
-#    ψ = timeevolve(evolution_time, ψ, H)
-#end
+function gaussian_spin_profile(ρ, ϕ)
+    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
+    ψ = ψ0.data
+    H(t) = gaussian(σ1, σ2)(ρ, ϕ)
+    evolution_time = π/(2)
+    step_size = evolution_time/1
+    T = [0.0:step_size:evolution_time;];
+    T = [0, evolution_time]
+    ψ = timeevolve(evolution_time, ψ, H)
+end
 
 
 #function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
@@ -165,16 +165,16 @@ end
 #    end
 #end
 
-function gaussian_spin_profile(ρ, ϕ)
-    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b)
-    evolution_time = π/(2)
-    step_size = evolution_time/1
-    T = [0.0:step_size:evolution_time;];
-    T = [0, evolution_time]
-    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
-    last(ψ)
-end
+#function gaussian_spin_profile(ρ, ϕ)
+#    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
+#    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b)
+#    evolution_time = π/(2)
+#    step_size = evolution_time/1
+#    T = [0.0:step_size:evolution_time;];
+#    T = [0, evolution_time]
+#    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
+#    last(ψ)
+#end
 function R(n::Int64, m::Int64, ρ::Float64)
     if (n - m) % 2 != 0
         0

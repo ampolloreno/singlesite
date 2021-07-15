@@ -104,14 +104,16 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function timeevolve(evolution_time, ψ, H; step=10E-10) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
+function timeevolve(evolution_time, ψ, H; step=10E-8) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
     ψ[1] = ψ[1]
     ψ[2] = ψ[2]
     T = [0.0:step:evolution_time;]
     a = BigFloat(1)
     b = BigFloat(1)
     for t in T
-	c = cos(H(t) * step)
+        t = BigFloat(t)
+	step = BigFloat(step)
+        c = cos(H(t) * step)
         d = sin(H(t) * step)
         a *= c - 1.0im*d
         b *= c + 1.0im*d
@@ -135,33 +137,33 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     end
 end
 
-function gaussian_spin_profile(ρ, ϕ)
-    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-    ψ = ψ0.data
-    H(t) = gaussian(σ1, σ2)(ρ, ϕ)
-    evolution_time = π/(2)
-    step_size = evolution_time/1
-    T = [0.0:step_size:evolution_time;];
-    T = [0, evolution_time]
-    ψ = timeevolve(evolution_time, ψ, H)
-end
+#function gaussian_spin_profile(ρ, ϕ)
+#    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
+#    ψ = ψ0.data
+#    H(t) = gaussian(σ1, σ2)(ρ, ϕ)
+#    evolution_time = π/(2)
+#    step_size = evolution_time/1
+#    T = [0.0:step_size:evolution_time;];
+#    T = [0, evolution_time]
+#    ψ = timeevolve(evolution_time, ψ, H)
+#end
 
 
-function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
-    """Apply all the zernike coefficients given, in order, for time T each."""
-    orders = range(0, maxm, step=1)
-    function evaluator(ρ, ϕ)
-        ψ = ψ0
-        for order1 in orders
-            for order2 in range(0, maxn, step=1)
-                H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
-                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H;)# dtmin=1e-3)#; dtmin=1e-5, dt=1.1e-4)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
-                ψ = last(ψ)
-            end
-        end
-        ψ
-    end
-end
+#function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
+#    """Apply all the zernike coefficients given, in order, for time T each."""
+#    orders = range(0, maxm, step=1)
+#    function evaluator(ρ, ϕ)
+#        ψ = ψ0
+#        for order1 in orders
+#            for order2 in range(0, maxn, step=1)
+#                H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
+#                _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H;)# dtmin=1e-3)#; dtmin=1e-5, dt=1.1e-4)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
+#                ψ = last(ψ)
+#            end
+#        end
+#        ψ
+#    end
+#end
 
 function gaussian_spin_profile(ρ, ϕ)
     ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))

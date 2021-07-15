@@ -106,9 +106,8 @@ function timeevolve(evolution_time, ψ, H; step=10E-8) # Assume H is proportiona
     num_steps = evolution_time/step
     i = 0
     while i < num_steps
-        t = i*step
         i+=1
-        h = H(t) * step
+        h = H(i*step) * step
         ψ[1]  *= cos(h) - 1.0im*sin(h)
         ψ[2]  *= cos(h) + 1.0im*sin(h)
     end

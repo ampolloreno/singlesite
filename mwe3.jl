@@ -168,7 +168,7 @@ end
 maxn = 32
 max_order = 15
 
-ω = 2*π*180E3
+ω = 2*π*180E5
 θ = -π/2;
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))

@@ -116,7 +116,7 @@ end
 
 function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
     """Apply all the zernike coefficients given, in order, for time T each."""
-    orders = range(0, maxm, step=1)
+    orders = range(1, maxm, step=1)
     function evaluator(ρ, ϕ)
         ψ = ψ0.data
         for order1 in orders
@@ -166,7 +166,7 @@ function Z(n, m, ρ, θ)
 end
 
 maxn = 32
-max_order = 40
+max_order = 100
 
 ω = 2*π*180E3
 θ = -π/2;

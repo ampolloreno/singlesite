@@ -166,7 +166,7 @@ function Z(n, m, ρ, θ)
 end
 
 maxn = 32
-max_order = 200
+max_order = 15
 
 ω = 2*π*180E3
 θ = -π/2;

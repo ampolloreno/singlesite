@@ -102,7 +102,7 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function timeevolve(evolution_time, ψ, H; step=10E-8) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
+function timeevolve(evolution_time, ψ, H; step=10E-9) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
     num_steps = evolution_time/step
     i = 0
     while i < num_steps
@@ -124,7 +124,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
             #    if order1 ≤ order2
             order2=0
             H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
-            timeevolve(evolution_time, ψ, H)
+            @fastmath(timeevolve(evolution_time, ψ, H))
         end
         ψ
     end

@@ -1,0 +1,47 @@
+1.626394814727805e9
+[ Info: Defining absense of feature x86_64_prfchw.
+[ Info: Defining absense of feature x86_64_bmi2.
+[ Info: Defining absense of feature x86_64_fsgsbase.
+[ Info: Defining absense of feature x86_64_xsavec.
+[ Info: Defining absense of feature x86_64_mpx.
+[ Info: Defining absense of feature x86_64_aes.
+[ Info: Defining absense of feature x86_64_xsaves.
+[ Info: Defining absense of feature x86_64_avx512vnni.
+[ Info: Defining absense of feature x86_64_clwb.
+[ Info: Defining absense of feature x86_64_avx512f.
+[ Info: Defining absense of feature x86_64_pku.
+[ Info: Defining absense of feature x86_64_rdseed.
+[ Info: Defining absense of feature x86_64_avx512bw.
+[ Info: Defining absense of feature x86_64_clflushopt.
+[ Info: Defining absense of feature x86_64_xsave.
+[ Info: Defining absense of feature x86_64_avx512vl.
+[ Info: Defining absense of feature x86_64_invpcid.
+[ Info: Defining absense of feature x86_64_avx512cd.
+[ Info: Defining absense of feature x86_64_avx.
+[ Info: Defining absense of feature x86_64_fma.
+[ Info: Defining absense of feature x86_64_bmi.
+[ Info: Defining absense of feature x86_64_rdrnd.
+[ Info: Defining absense of feature x86_64_avx2.
+[ Info: Defining absense of feature x86_64_lzcnt.
+[ Info: Defining absense of feature x86_64_pclmul.
+[ Info: Defining absense of feature x86_64_f16c.
+[ Info: Defining absense of feature x86_64_movbe.
+[ Info: Defining absense of feature x86_64_xsaveopt.
+[ Info: Defining absense of feature x86_64_avx512dq.
+[ Info: Defining absense of feature x86_64_adx.
+[ Info: Defining CPU name.
+[ Info: Redefining cache 2.
+[ Info: Redefining cache 3.
+ERROR: LoadError: UndefVarError: order1 not defined
+Stacktrace:
+ [1] (::var"#H#5"{Float64,Float64,Int64,Float64,Float64,Float64})(::Float64) at /users/smith/anpo0771/repos/singlesite/mwe3.jl:123
+ [2] timeevolve(::Float64, ::Array{Complex{Float64},1}, ::var"#H#5"{Float64,Float64,Int64,Float64,Float64,Float64}; step::Float64) at /users/smith/anpo0771/repos/singlesite/mwe3.jl:110
+ [3] timeevolve(::Float64, ::Array{Complex{Float64},1}, ::Function) at /users/smith/anpo0771/repos/singlesite/mwe3.jl:106
+ [4] (::var"#evaluator#4"{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},Float64,Float64,Float64,StepRange{Int64,Int64}})(::Float64, ::Float64) at /users/smith/anpo0771/repos/singlesite/mwe3.jl:127
+ [5] (::var"#infidelity_polar#2"{var"#evaluator#4"{Ket{SpinBasis{1//2,Int64},Array{Complex{Float64},1}},Float64,Float64,Float64,StepRange{Int64,Int64}},typeof(gaussian_spin_profile)})(::Float64, ::Float64) at /users/smith/anpo0771/repos/singlesite/mwe3.jl:98
+ [6] top-level scope at /users/smith/anpo0771/repos/singlesite/mwe3.jl:183
+ [7] include(::Function, ::Module, ::String) at ./Base.jl:380
+ [8] include(::Module, ::String) at ./Base.jl:368
+ [9] exec_options(::Base.JLOptions) at ./client.jl:296
+ [10] _start() at ./client.jl:506
+in expression starting at /users/smith/anpo0771/repos/singlesite/mwe3.jl:183

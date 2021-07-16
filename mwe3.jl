@@ -38,8 +38,8 @@ end
 
 
 
-σ1 = .1
-σ2 = .1
+σ1 = .2
+σ2 = .2
 amp= .01  #bringing this up to .1 fixed it, I have no idea why...
 
 

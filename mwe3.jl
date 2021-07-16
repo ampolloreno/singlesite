@@ -38,8 +38,8 @@ end
 
 
 
-σ1 = .25
-σ2 = 2.5
+σ1 = .1
+σ2 = 1
 amp= .01  #bringing this up to .1 fixed it, I have no idea why...
 
 
@@ -166,7 +166,7 @@ function Z(n, m, ρ, θ)
 end
 
 maxn = 32
-max_order = 15
+max_order = 40
 
 ω = 2*π*180E3
 θ = -π/2;

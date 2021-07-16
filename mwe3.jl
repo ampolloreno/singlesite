@@ -95,8 +95,8 @@ end
 
 function infidelity_across_disk(F1, F2)
     function infidelity_polar(ρ, ϕ)
-        ψ1 = F1(ρ, ϕ)
-        ψ2 = F2(ρ, ϕ)
+        ψ1 = F1(ρ, ϕ).data
+        ψ2 = F2(ρ, ϕ).data
         infid = 1 - real(fidelity(ψ1, ψ2))
         return infid, ψ1, ψ2
     end
@@ -114,17 +114,45 @@ function timeevolve(evolution_time, ψ, H; step=10E-8) # Assume H is proportiona
 end
 
 
+#function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
+#    """Apply all the zernike coefficients given, in order, for time T each."""
+#    orders = range(0, maxm, step=1)
+#    function evaluator(ρ, ϕ)
+#        ψ = ψ0.data
+#        for order1 in orders
+#            #for order2 in range(0, maxn, step=1)
+#            #    if order1 ≤ order2
+#            order2=0
+#            H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
+#            timeevolve(T, ψ, H)
+#        end
+#        ψ
+#    end
+#end
+
+#function gaussian_spin_profile(ρ, ϕ)
+#    ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
+#    ψ = ψ0.data
+#    H(t) = gaussian(σ1, σ2)(ρ, ϕ)
+#    evolution_time = π/(2)
+#    #step_size = evolution_time/1
+#    #T = [0.0:step_size:evolution_time;];
+#    #T = [0, evolution_time]
+#    timeevolve(evolution_time, ψ, H)
+#    ψ
+#end
+
 function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b)
     """Apply all the zernike coefficients given, in order, for time T each."""
     orders = range(0, maxm, step=1)
+    T = [0, evolution_time]
     function evaluator(ρ, ϕ)
-        ψ = ψ0.data
+        ψ = ψ0
         for order1 in orders
-            #for order2 in range(0, maxn, step=1)
-            #    if order1 ≤ order2
-            order2=0
-            H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
-            timeevolve(T, ψ, H)
+            order2 = 0
+            H(t, _) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
+            _, ψ = timeevolution.schroedinger_dynamic(T, ψ, H;)# dtmin=1e-3)#; dtmin=1e-5, dt=1.1e-4)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
+            ψ = last(ψ)
         end
         ψ
     end
@@ -132,14 +160,13 @@ end
 
 function gaussian_spin_profile(ρ, ϕ)
     ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-    ψ = ψ0.data
-    H(t) = gaussian(σ1, σ2)(ρ, ϕ)
+    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b)
     evolution_time = π/(2)
-    #step_size = evolution_time/1
-    #T = [0.0:step_size:evolution_time;];
-    #T = [0, evolution_time]
-    timeevolve(evolution_time, ψ, H)
-    ψ
+    step_size = evolution_time/1
+    T = [0.0:step_size:evolution_time;];
+    T = [0, evolution_time]
+    _, ψ = timeevolution.schroedinger_dynamic(T, ψ0, H)#;maxiters=1e5)# abstol=1e-10, reltol=1e-8)
+    last(ψ)
 end
 
 
@@ -173,7 +200,7 @@ max_order = 15
 b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = 2 * π * 10E3
-evolution_time = 5*π/(2*U*amp)
+evolution_time = π/(2*U*amp)
 T = evolution_time
 sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_order, U, θ, ω, b)
 x = parse(Float64, ARGS[1])

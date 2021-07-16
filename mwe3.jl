@@ -39,7 +39,7 @@ end
 
 
 σ1 = .2
-σ2 = .2
+σ2 = .5
 amp= .01  #bringing this up to .1 fixed it, I have no idea why...
 
 

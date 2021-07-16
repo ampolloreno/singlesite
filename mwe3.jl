@@ -124,7 +124,7 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
             #    if order1 ≤ order2
             order2=0
             H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
-            timeevolve(evolution_time, ψ, H)
+            timeevolve(T, ψ, H)
         end
         ψ
     end
@@ -174,7 +174,7 @@ b = SpinBasis(1//2)
 ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
 U = 2 * π * 10E3
 evolution_time = π/(2*U*amp)
-T = [0, evolution_time]
+T = evolution_time
 sequential_exact_evolution = sequential_exact_evolution_evaluator_factory(ψ0, T, max_order, U, θ, ω, b)
 x = parse(Float64, ARGS[1])
 y = parse(Float64, ARGS[2])

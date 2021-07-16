@@ -160,7 +160,7 @@ end
 
 function gaussian_spin_profile(ρ, ϕ)
     ψ0 = 1/sqrt(2) * (spindown(b) + spinup(b))
-    H(t, _) = gaussian(σ1, σ2/4)(ρ, ϕ) * sigmaz(b)
+    H(t, _) = gaussian(σ1, σ2)(ρ, ϕ) * sigmaz(b)
     evolution_time = π/(2)
     step_size = evolution_time/1
     T = [0.0:step_size:evolution_time;];

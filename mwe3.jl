@@ -88,8 +88,8 @@ end
 lookup2 = Dict()
 
 function H_odf(ρ, ϕ, t, zernike_recon, U, ψ, order1, order2, ω)
-    U * cos(-order1*ω*t + ψ + amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1] * cos(order1 * (ϕ-ω*t)))
-    #U * cos(-order1*ω*t + ψ + amp * gaussian(σ1, σ2)(ρ, (ϕ-ω*t)))
+    #U * cos(-order1*ω*t + ψ + amp * lookup[Int(round(ρ * 10^3, digits=0)), order2, order1] * cos(order1 * (ϕ-ω*t)))
+    U * cos(-order1*ω*t + ψ + amp * gaussian(σ1, σ2)(ρ, (ϕ-ω*t)))
 end
 
 
@@ -120,12 +120,11 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     function evaluator(ρ, ϕ)
         ψ = ψ0.data
         for order1 in orders
-            for order2 in range(0, maxn, step=1)
-                if order1 ≤ order2
-                    H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
-                    timeevolve(evolution_time, ψ, H)
-                end
-            end
+            #for order2 in range(0, maxn, step=1)
+            #    if order1 ≤ order2
+            order2=0
+            H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
+            timeevolve(evolution_time, ψ, H)
         end
         ψ
     end

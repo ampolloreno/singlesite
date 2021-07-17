@@ -105,9 +105,7 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function timeevolve(evolution_time, ψ, H; step=10E-15) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
-    ψ[1] = ψ[1]
-    ψ[2] = ψ[2]
+function timeevolve(evolution_time, ψ, H; step=10E-8) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
     num_steps = evolution_time/step
     #T = [0.0:step:evolution_time;]
     a = 1
@@ -130,10 +128,10 @@ function sequential_exact_evolution_evaluator_factory(ψ0, T, maxm, U, θ, ω, b
     """Apply all the zernike coefficients given, in order, for time T each."""
     orders = range(0, maxm, step=1)
     function evaluator(ρ, ϕ)
-        ψ = ψ0
+        ψ = ψ0.data
         for order1 in orders
             for order2 in range(0, maxn, step=1)
-                H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)*sigmaz(b)
+                H(t) = H_odf(ρ, ϕ, t, 0, U, θ, order1, order2, ω)
                 ψ = timeevolve(evolution_time, ψ, H)
             end
         end

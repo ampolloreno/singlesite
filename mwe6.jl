@@ -104,7 +104,7 @@ function infidelity_across_disk(F1, F2)
     end
 end
 
-function timeevolve(evolution_time, ψ, H; step=10E-10) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
+function timeevolve(evolution_time, ψ, H; step=10E-11) # Assume H is proportional to Z need 1E-6 just for first order to be right - probably need E-7 for 10, so -8 or so for 15
     num_steps = evolution_time/step
     #T = [0.0:step:evolution_time;]
     a = 1

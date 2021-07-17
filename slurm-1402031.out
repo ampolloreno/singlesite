@@ -1,0 +1,9 @@
+1.62650120068526e9
+ERROR: LoadError: syntax: incomplete: "function" at /users/smith/anpo0771/repos/singlesite/mwe6.jl:88 requires end
+Stacktrace:
+ [1] top-level scope at /users/smith/anpo0771/repos/singlesite/mwe6.jl:88
+ [2] include(::Function, ::Module, ::String) at ./Base.jl:380
+ [3] include(::Module, ::String) at ./Base.jl:368
+ [4] exec_options(::Base.JLOptions) at ./client.jl:296
+ [5] _start() at ./client.jl:506
+in expression starting at /users/smith/anpo0771/repos/singlesite/mwe6.jl:88
